@@ -1,34 +1,21 @@
 ---
-import Game from '../react/Game.jsx';
-import Terminal from '../react/Terminal.jsx';
+import MemoryGame from '../react/memory/MemoryGame.jsx';
+// The game's rules live in src/components/react/memory/useMemoryGame.js, moved
+// unchanged from the original src/components/react/Game.jsx (kept, not used).
+// The v1 terminal is kept in src/components/react/Terminal.jsx but not shown
+// for now. To bring it back: import Terminal from '../react/Terminal.jsx';
+// and render <Terminal client:visible /> inside a .legacy-scope wrapper.
 ---
 
-<section id="playground" class="section section-dark" aria-labelledby="playground-title">
-  <header class="mb-16 text-center">
-    <p class="eyebrow mb-4">Bored of scrolling?</p>
+<section id="playground" class="section" aria-labelledby="playground-title">
+  <header class="mb-12 text-center">
     <h2 id="playground-title" class="headline text-[length:var(--text-display)]" data-split>
-      Play<span class="headline-serif">ground</span>
+      Bored of <span class="headline-serif">scrolling?</span>
     </h2>
+    <p class="mt-6 text-ink-soft">
+      Try the <b class="text-ink">memory game</b> I built. The grid grows and the patterns get harder every level.
+    </p>
   </header>
 
-  <div class="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-2">
-    <div>
-      <p class="mb-6 text-center text-paper/70">
-        Try the <b class="text-paper">memory game</b> I built. The grid grows and the patterns get harder every level.
-      </p>
-      <!-- The game is the v1 component, unchanged. legacy-scope restores its v1 font. -->
-      <div class="legacy-scope flex justify-center">
-        <div class="rounded-xl border border-slate-700/50 bg-slate-800/30 p-8 backdrop-blur-sm">
-          <Game client:visible />
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <p class="mb-6 text-center text-paper/70">Or poke around the terminal. Try <code class="font-mono text-teal">help</code>.</p>
-      <div class="legacy-scope flex justify-center">
-        <Terminal client:visible />
-      </div>
-    </div>
-  </div>
+  <MemoryGame client:visible />
 </section>

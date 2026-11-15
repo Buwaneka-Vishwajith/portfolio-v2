@@ -1,0 +1,105 @@
+[
+  {
+    "id": "f13dacf3ca51",
+    "title": "Why Auto Increment IDs Quietly Break Your App (And Why UUIDs Save You)",
+    "link": "https://medium.com/@buwaneka10000/why-auto-increment-ids-quietly-break-your-app-and-why-uuids-save-you-f13dacf3ca51",
+    "published": "2026-08-14T10:28:58.000Z",
+    "tags": [
+      "distributed-systems",
+      "backend-development",
+      "database-design",
+      "uuid",
+      "distributed-system-design"
+    ],
+    "excerpt": "Every app needs a way to say “this thing is this thing.” A user, an order, a photo, a message. Each one needs a name tag that nobody else has. In software, we call that name a t…",
+    "cover": "/media/articles/f13dacf3ca51.png"
+  },
+  {
+    "id": "99db3baa1927",
+    "title": "Dijkstra’s Algorithm… The GPS Inside Your Apps",
+    "link": "https://medium.com/@buwaneka10000/dijkstras-algorithm-the-gps-inside-your-apps-99db3baa1927",
+    "published": "2025-08-19T05:02:37.000Z",
+    "tags": [
+      "dijkstras-algorithm",
+      "dijkstra",
+      "shortest-path",
+      "shortest-path-algorithm",
+      "data-structures"
+    ],
+    "excerpt": "Imagine standing in the middle of a city you’ve never been to. You pull out your phone, open Google Maps, and ask it for the quickest route to your favorite coffee shop. It show…",
+    "cover": "/media/articles/99db3baa1927.png"
+  },
+  {
+    "id": "0c107cc3d574",
+    "title": "GraphQL Feels Like Chatting with Your Database!",
+    "link": "https://medium.com/@buwaneka10000/graphql-feels-like-chatting-with-your-database-0c107cc3d574",
+    "published": "2025-07-17T07:26:05.000Z",
+    "tags": [
+      "graphql-vs-rest-api",
+      "graphql",
+      "graphql-vs-rest",
+      "javascript",
+      "rest-api"
+    ],
+    "excerpt": "So you’ve been building apps using REST APIs for a while now, creating endpoints like /users/posts, /comments , dealing with pagination, nested routes, and all that jazz.",
+    "cover": "/media/articles/0c107cc3d574.png"
+  },
+  {
+    "id": "c4f0912ade73",
+    "title": "React Hooks-useEffect Explained",
+    "link": "https://medium.com/@buwaneka10000/react-hooks-useeffect-explained-c4f0912ade73",
+    "published": "2024-12-10T14:24:06.000Z",
+    "tags": [
+      "react-hook",
+      "useref",
+      "reactjs",
+      "useeffect",
+      "usestate"
+    ],
+    "excerpt": "It’s a hook from React that performs side effects on an application.The side effect part is just like when you take some medicine and have a side effect because of that medicine…",
+    "cover": "/media/articles/c4f0912ade73.png"
+  },
+  {
+    "id": "ce5cc100b581",
+    "title": "Javascript arrow function =>",
+    "link": "https://medium.com/@buwaneka10000/javascript-arrow-function-ce5cc100b581",
+    "published": "2024-07-12T11:02:39.000Z",
+    "tags": [
+      "es6-module",
+      "es6",
+      "es6-js",
+      "javascript",
+      "function"
+    ],
+    "excerpt": "Let’s create a function that squares a number and loops through an array of numbers.",
+    "cover": "/media/articles/ce5cc100b581.png"
+  },
+  {
+    "id": "7381cd31effe",
+    "title": "Javascript map() vs forEach()",
+    "link": "https://medium.com/@buwaneka10000/javascript-map-vs-foreach-7381cd31effe",
+    "published": "2024-07-11T17:38:29.000Z",
+    "tags": [
+      "es6",
+      "javascript",
+      "foreach"
+    ],
+    "excerpt": "The map() method allows you to loop through an array and perform an operation on each item, returning a new array with the results. To use the map() function, we need an array.…",
+    "cover": "/media/articles/7381cd31effe.png"
+  },
+  {
+    "id": "4658bff2e15f",
+    "title": "Why didn’t JavaScript use the require() function, which was already there?",
+    "link": "https://medium.com/@buwaneka10000/why-didnt-javascript-use-the-require-function-which-was-already-there-4658bff2e15f",
+    "published": "2024-02-02T07:38:06.000Z",
+    "tags": [
+      "programming",
+      "javascript",
+      "es6",
+      "commonjs",
+      "ecmascript"
+    ],
+    "excerpt": "JavaScript was invented as a scripting language for web browsers, but after Node.js was introduced, people realized that they could use it for other applications outside the bro…",
+    "cover": "/media/articles/4658bff2e15f.png"
+  }
+]

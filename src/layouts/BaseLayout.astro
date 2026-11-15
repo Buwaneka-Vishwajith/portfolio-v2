@@ -5,8 +5,9 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
-import Nav from '../components/ui/Nav.astro';
+// Top bar (logo, nav, Contact) is off for now; src/components/ui/Nav.astro is kept.
 import Footer from '../components/ui/Footer.astro';
+import SiteCursor from '../components/react/SiteCursor.jsx';
 import { site } from '../data/site';
 
 interface Props {
@@ -42,11 +43,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] pill bg-teal text-ink">
       Skip to content
     </a>
-    <Nav />
     <main id="main">
       <slot />
     </main>
     <Footer />
+
+    <!-- Cursor swarm (desktop only; skipped for reduced motion). Colour: src/components/react/SiteCursor.jsx -->
+    <SiteCursor client:idle transition:persist />
 
     <!-- Phase 3: smooth scroll + GSAP animations hook in here -->
     <script>

@@ -162,6 +162,11 @@
     grid-auto-rows: minmax(15rem, auto);
   }
 
+  /* /work page: fill gaps left by large tiles with later, smaller ones */
+  .bento-dense {
+    grid-auto-flow: row dense;
+  }
+
   /* Astro wraps each React card in <astro-island>; let it act as the grid item. */
   .bento > astro-island {
     display: contents;
@@ -181,5 +186,254 @@
   .bento-card:has(.bento-link:focus-visible) {
     outline: 2px solid var(--color-teal);
     outline-offset: 3px;
+  }
+}
+
+/* Writing section: the carousel needs a fixed height */
+@layer components {
+  .writing-carousel {
+    height: clamp(380px, 46vw, 600px);
+  }
+}
+
+/* FlexCarousel sets overscroll-behavior: contain, which stops a vertical
+   wheel/trackpad scroll over the cards from reaching the page. Let it pass.
+   Kept outside @layer on purpose: the component's own CSS is unlayered, and
+   unlayered rules beat layered ones. */
+.writing-carousel .flex-carousel {
+  overscroll-behavior: auto;
+}
+
+/* Memory game (Playground), Editorial direction */
+@layer components {
+  .memory-game {
+    --mg-flash: #fc734d; /* pattern flash */
+    --mg-pick: #0297de;  /* your picks */
+    width: min(100%, 360px);
+    margin-inline: auto;
+    padding: 1.5rem;
+    border-radius: 1.25rem;
+    background: #fbfbf8;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-ink) 10%, transparent),
+      0 24px 48px -28px color-mix(in srgb, var(--color-ink) 35%, transparent);
+    color: var(--color-ink);
+  }
+  .memory-game__grid {
+    display: grid;
+    gap: 0.5rem;
+    aspect-ratio: 1;
+  }
+  .memory-game__tile {
+    border-radius: 0.375rem;
+    background: var(--color-ink);
+    transition: background-color 0.18s, transform 0.18s var(--ease-out-expo), box-shadow 0.18s;
+  }
+  .memory-game__tile:enabled {
+    cursor: pointer;
+  }
+  .memory-game__tile:enabled:hover {
+    transform: translateY(-2px);
+    background: #26272b;
+  }
+  .memory-game__tile:enabled:active {
+    transform: scale(0.94);
+  }
+  .memory-game__tile[data-tile="flash"] {
+    background: var(--mg-flash);
+    transform: scale(1.04);
+  }
+  .memory-game__tile[data-tile="picked"],
+  .memory-game__tile[data-tile="picked"]:enabled:hover {
+    background: var(--mg-pick);
+  }
+  /* After a loss: wrong picks fade, missed tiles get the pattern colour as an outline */
+  .memory-game__tile[data-tile="wrong"] {
+    background: var(--mg-pick);
+    opacity: 0.35;
+  }
+  .memory-game__tile[data-tile="missed"] {
+    background: transparent;
+    box-shadow: inset 0 0 0 3px var(--mg-flash);
+  }
+  .memory-game[data-state="waiting"] .memory-game__grid {
+    opacity: 0.85;
+  }
+  .memory-game__bar {
+    height: 3px;
+    margin: 1.25rem 0 1rem;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--color-ink) 12%, transparent);
+    overflow: hidden;
+  }
+  .memory-game__bar > span {
+    display: block;
+    height: 100%;
+    background: var(--mg-pick);
+    transform-origin: left;
+    transition: transform 0.25s var(--ease-out-expo);
+  }
+  .memory-game__foot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+  }
+  .memory-game__lost {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+  .memory-game__start {
+    border-radius: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: transform 0.2s, background-color 0.2s;
+  }
+  .memory-game__start:hover {
+    transform: translateY(-1px);
+    background: #26272b;
+  }
+}
+
+/* Frosted-glass bento cards: the translucent card blurs whatever drifts behind
+   it (the cursor swarm). Surface colour is set on each card's style prop.
+   Outside @layer so it beats SpotlightCard's own (unlayered) box-shadow. */
+.bento-card.spotlight-card {
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  backdrop-filter: blur(18px) saturate(1.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), var(--spotlight-card-shadow);
+}
+
+/* Experience folders */
+@layer components {
+  .exp-folders {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5rem 4rem;
+    /* Room above the folders: open pages fan out upwards */
+    padding-top: 9rem;
+    max-width: 72rem;
+    margin-inline: auto;
+  }
+  .exp-folders__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  /* An open folder sits above its neighbours so its pages aren't covered */
+  .exp-folders__item:has(.folder-root[data-open]) {
+    z-index: 20;
+  }
+  /* Folder size at size={1.15}: 224 x (20 + 176) px, scaled */
+  .exp-folders__slot {
+    width: calc(224px * 1.15);
+    height: calc(196px * 1.15);
+  }
+  .exp-folders__caption {
+    margin-top: 1.5rem;
+    max-width: 16rem;
+    text-align: center;
+  }
+  .exp-folders__position {
+    font-family: var(--font-display);
+    font-stretch: 62%;
+    font-weight: 800;
+    font-size: 1.5rem;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+  .exp-folders__company {
+    margin-top: 0.35rem;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+  }
+  .exp-folders__period {
+    margin-top: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-soft);
+  }
+
+  /* Pages inside the folders */
+  .exp-page {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    gap: calc(4px * var(--folder-scale));
+    padding: calc(12px * var(--folder-scale)) calc(11px * var(--folder-scale));
+    color: var(--color-ink);
+    text-align: left;
+  }
+  .exp-page__kicker {
+    font-family: var(--font-mono);
+    font-size: calc(6.5px * var(--folder-scale));
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-soft);
+  }
+  .exp-page__title {
+    font-family: var(--font-display);
+    font-stretch: 62%;
+    font-weight: 800;
+    font-size: calc(14px * var(--folder-scale));
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+  .exp-page__meta {
+    font-size: calc(7.5px * var(--folder-scale));
+    line-height: 1.3;
+    color: var(--color-ink-soft);
+  }
+  .exp-page__list {
+    display: flex;
+    flex-direction: column;
+    gap: calc(4px * var(--folder-scale));
+    font-size: calc(7px * var(--folder-scale));
+    line-height: 1.35;
+  }
+  .exp-page__list li::before {
+    content: "— ";
+  }
+  .exp-page__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(3px * var(--folder-scale));
+  }
+  .exp-page__chips li {
+    padding: calc(2px * var(--folder-scale)) calc(4px * var(--folder-scale));
+    border-radius: calc(3px * var(--folder-scale));
+    background: color-mix(in srgb, var(--color-ink) 7%, transparent);
+    font-family: var(--font-mono);
+    font-size: calc(6.5px * var(--folder-scale));
+  }
+}
+
+/* Experience menu: keep dates on one line */
+@layer components {
+  .flowing-menu__meta {
+    white-space: nowrap;
+  }
+}
+
+/* Experience menu: long job titles shrink to fit the row on narrow screens.
+   Outside @layer so it beats FlowingMenu's own (unlayered) font-size. */
+.flowing-menu .flowing-menu__label {
+  font-size: clamp(16px, min(40cqh, 4.6cqw), 140px);
+}
+@media (max-width: 639px) {
+  /* No room for dates beside long job titles on phones */
+  .flowing-menu .flowing-menu__end {
+    display: none;
+  }
+  .flowing-menu .flowing-menu__label {
+    font-size: clamp(14px, min(40cqh, 5.4cqw), 140px);
   }
 }

@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BentoCard from '../../components/ui/BentoCard.astro';
+import { getAllProjects } from '../../lib/projects';
+
+// Every project. Tile size = each file's `bento` field; order = its `order` field.
+const projects = await getAllProjects();
+---
+
+<BaseLayout title="All projects" description="Every project Buwaneka Vishwajith has designed, built and shipped.">
+  <section class="section min-h-screen pt-40" aria-labelledby="all-title">
+    <header class="mb-16 text-center">
+      <p class="eyebrow mb-4">{projects.length} projects and counting.</p>
+      <h1 id="all-title" class="headline text-[length:var(--text-hero)]">
+        All <span class="headline-serif">projects</span>
+      </h1>
+    </header>
+
+    <div class="bento bento-dense mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {projects.map((project) => <BentoCard project={project} />)}
+    </div>
+
+    <p class="mt-16 text-center">
+      <a href="/#work" class="pill ring-1 ring-ink/20 hover:bg-ink hover:text-paper">← Back home</a>
+    </p>
+  </section>
+</BaseLayout>

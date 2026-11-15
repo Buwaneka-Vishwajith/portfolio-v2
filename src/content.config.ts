@@ -44,6 +44,10 @@ const experience = defineCollection({
     description: z.array(z.string()),
     technologies: z.array(z.string()),
     hidden: z.boolean().default(false),
+    // Folder tab text. Defaults to the company name (long names get cut off).
+    tab: z.string().optional(),
+    // Folder colour, e.g. "#0297DE". Defaults to the next colour in the palette.
+    color: z.string().optional(),
   }),
 });
 

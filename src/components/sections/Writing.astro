@@ -1,0 +1,50 @@
+---
+import ArticleCarousel from '../react/ArticleCarousel.jsx';
+import { getSelectedArticles, formatMonth } from '../../lib/articles';
+import { mediumProfile } from '../../data/articles';
+
+// Which articles appear: src/data/articles.ts. Empty list = no section.
+// Medium tags look like "web-development"; show them as "Web development".
+const prettyTag = (tag?: string) =>
+  tag ? tag.replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase()) : undefined;
+
+const articles = getSelectedArticles().map((a) => ({
+  ...a,
+  subtitle: [formatMonth(a.published), prettyTag(a.tags[0])].filter(Boolean).join(' · '),
+}));
+---
+
+{articles.length > 0 && (
+  <section id="writing" class="section" aria-labelledby="writing-title">
+    <header class="mb-6 text-center">
+      <p class="eyebrow mb-4">Notes from building things</p>
+      <h2 id="writing-title" class="headline text-[length:var(--text-display)]" data-split>
+        Writ<span class="headline-serif">ing</span>
+      </h2>
+    </header>
+
+    <!-- Visual carousel (WebGL). Click the centre card to read it on Medium. -->
+    <!-- Full-bleed: the negative margins cancel the section's side padding -->
+    <div class="writing-carousel relative -mx-[clamp(1.25rem,4vw,3rem)]" aria-hidden="true">
+      <ArticleCarousel client:visible articles={articles} />
+    </div>
+
+    <!-- The same articles as plain links, hidden visually: for screen readers and search engines. -->
+    <ul class="sr-only">
+      {articles.map((a) => (
+        <li>
+          <a href={a.link} target="_blank" rel="noopener noreferrer" class="group flex items-baseline justify-between gap-6 py-4 hover:text-ink-soft">
+            <span class="font-medium">{a.title}</span>
+            <span class="shrink-0 font-mono text-xs text-ink-soft">{a.subtitle} <span aria-hidden="true">↗</span></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <p class="mt-10 text-center">
+      <a href={mediumProfile} target="_blank" rel="noopener noreferrer" class="pill bg-ink text-paper hover:-translate-y-0.5">
+        More on Medium ↗
+      </a>
+    </p>
+  </section>
+)}

@@ -1,10 +1,8 @@
 ---
-import { stack } from '../../data/site';
+import TechLoop from '../react/TechLoop.jsx';
 ---
 
-<!-- Phase 3: turn this into a looping marquee (data-marquee) -->
-<section class="overflow-hidden border-y border-ink/10 py-6" aria-label="Technologies I work with">
-  <ul class="flex flex-wrap justify-center gap-x-10 gap-y-3 px-6 font-mono text-sm uppercase tracking-wider text-ink-soft" data-marquee>
-    {stack.map((tech) => <li>{tech}</li>)}
-  </ul>
+<!-- Tech list lives in src/data/site.ts (stack). -->
+<section class="border-y border-ink/10 py-8 text-ink" aria-label="Technologies I work with">
+  <TechLoop client:visible />
 </section>

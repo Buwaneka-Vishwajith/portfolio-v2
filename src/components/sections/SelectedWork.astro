@@ -1,18 +1,17 @@
 ---
-import { getCollection } from 'astro:content';
 import BentoCard from '../ui/BentoCard.astro';
-import SpotlightCard from '../react/SpotlightCard/SpotlightCard.jsx';
-import { socials } from '../../data/site';
+import SeeAllCard from '../ui/SeeAllCard.astro';
+import { getAllProjects, getHomeProjects } from '../../lib/projects';
 
-// Every project shows here. Tile size comes from `bento` in each
-// project's .mdx file; order comes from `order`.
-const projects = (await getCollection('projects'))
-  .sort((a, b) => a.data.order - b.data.order);
+// Which projects appear here, and in what order: src/data/home.ts
+const home = await getHomeProjects();
+const total = (await getAllProjects()).length;
 
-const github = socials.find((s) => s.label === 'GitHub')?.href;
+// Slot sizes are fixed: the first project is always the big tile.
+const slotSizes = ['large', 'small', 'small', 'small', 'small'] as const;
 ---
 
-<section id="work" class="section section-dark" aria-labelledby="work-title">
+<section id="work" class="section" aria-labelledby="work-title">
   <header class="mb-16 text-center">
     <p class="eyebrow mb-4">Things I've designed, built and shipped.</p>
     <h2 id="work-title" class="headline text-[length:var(--text-display)]" data-split>
@@ -21,24 +20,7 @@ const github = socials.find((s) => s.label === 'GitHub')?.href;
   </header>
 
   <div class="bento mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-    {projects.map((project) => <BentoCard project={project} />)}
-
-    {github && (
-      <SpotlightCard
-        client:visible
-        theme="dark"
-        spotlightColor="#2dd4bf"
-        intensity={0.18}
-        className="bento-card group flex h-full flex-col justify-between"
-        style={{ '--spotlight-card-surface': '#16171a' }}
-      >
-        <span class="font-mono text-[11px] uppercase tracking-wider text-paper/50">More on GitHub</span>
-        <p class="headline mt-8 text-3xl text-paper">
-          <a href={github} class="bento-link" target="_blank" rel="noopener noreferrer">
-            See all <span class="headline-serif">repos</span> ↗
-          </a>
-        </p>
-      </SpotlightCard>
-    )}
+    {home.map((project, i) => <BentoCard project={project} size={slotSizes[i]} />)}
+    <SeeAllCard total={total} />
   </div>
 </section>

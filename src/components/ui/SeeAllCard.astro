@@ -1,0 +1,24 @@
+---
+import SpotlightCard from '../react/SpotlightCard/SpotlightCard.jsx';
+
+interface Props { total: number }
+const { total } = Astro.props;
+---
+
+<SpotlightCard
+  client:visible
+  theme="light"
+  spotlightColor="#2dd4bf"
+  intensity={0}
+  borderGlow={0}
+  className="bento-card group flex h-full flex-col justify-between"
+  style={{ '--spotlight-card-surface': 'rgba(255, 255, 255, 0.5)' }}
+>
+  <div class="flex items-center justify-between">
+    <span class="font-mono text-[11px] uppercase tracking-wider text-ink-soft">{total} projects</span>
+    <span class="text-ink/40 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-ink" aria-hidden="true">→</span>
+  </div>
+  <p class="headline mt-8 text-3xl text-ink">
+    <a href="/work" class="bento-link">See all <span class="headline-serif">projects</span></a>
+  </p>
+</SpotlightCard>
