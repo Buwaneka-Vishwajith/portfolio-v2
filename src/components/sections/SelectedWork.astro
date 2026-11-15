@@ -1,9 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
-import ProjectCard from '../ui/ProjectCard.astro';
+import BentoCard from '../ui/BentoCard.astro';
+import SpotlightCard from '../react/SpotlightCard/SpotlightCard.jsx';
+import { socials } from '../../data/site';
 
-const featured = (await getCollection('projects', ({ data }) => data.featured))
+// Every project shows here. Tile size comes from `bento` in each
+// project's .mdx file; order comes from `order`.
+const projects = (await getCollection('projects'))
   .sort((a, b) => a.data.order - b.data.order);
+
+const github = socials.find((s) => s.label === 'GitHub')?.href;
 ---
 
 <section id="work" class="section section-dark" aria-labelledby="work-title">
@@ -14,8 +20,25 @@ const featured = (await getCollection('projects', ({ data }) => data.featured))
     </h2>
   </header>
 
-  <!-- Phase 3: these cards pin and stack on scroll -->
-  <div class="mx-auto flex max-w-5xl flex-col gap-10" data-card-stack>
-    {featured.map((project) => <ProjectCard project={project} />)}
+  <div class="bento mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    {projects.map((project) => <BentoCard project={project} />)}
+
+    {github && (
+      <SpotlightCard
+        client:visible
+        theme="dark"
+        spotlightColor="#2dd4bf"
+        intensity={0.18}
+        className="bento-card group flex h-full flex-col justify-between"
+        style={{ '--spotlight-card-surface': '#16171a' }}
+      >
+        <span class="font-mono text-[11px] uppercase tracking-wider text-paper/50">More on GitHub</span>
+        <p class="headline mt-8 text-3xl text-paper">
+          <a href={github} class="bento-link" target="_blank" rel="noopener noreferrer">
+            See all <span class="headline-serif">repos</span> ↗
+          </a>
+        </p>
+      </SpotlightCard>
+    )}
   </div>
 </section>

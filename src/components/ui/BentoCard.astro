@@ -1,0 +1,80 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SpotlightCard from '../react/SpotlightCard/SpotlightCard.jsx';
+
+interface Props { project: CollectionEntry<'projects'> }
+const { project } = Astro.props;
+const { data } = project;
+
+// The spotlight takes each project's frame color.
+const accent = {
+  teal: '#2dd4bf',
+  cobalt: '#3355ff',
+  coral: '#ff6b4a',
+  lilac: '#c9a7ff',
+}[data.frame];
+
+const span = {
+  large: 'md:col-span-2 md:row-span-2',
+  wide: 'md:col-span-2',
+  tall: 'md:row-span-2',
+  small: '',
+}[data.bento];
+
+const isLarge = data.bento === 'large';
+
+// Featured projects open their case study; the rest go to GitHub.
+const href = data.featured ? `/work/${project.id}` : data.github;
+const external = !data.featured;
+const meta = [data.year, data.team].filter(Boolean).join(' · ');
+const stack = isLarge ? data.stack.slice(0, 6) : data.stack.slice(0, 3);
+---
+
+<SpotlightCard
+  client:visible
+  theme="dark"
+  spotlightColor={accent}
+  intensity={0.18}
+  spotlightSize={isLarge ? 340 : 240}
+  softness={0.7}
+  shape="circle"
+  borderGlow={0.6}
+  proximity={80}
+  smoothing={0.3}
+  grain={0}
+  flare
+  className={`bento-card group flex h-full flex-col ${span}`}
+  style={{ '--spotlight-card-surface': '#16171a' }}
+>
+  <div class="flex items-center justify-between gap-4">
+    <span class="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-paper/50">
+      <span class="h-2 w-2 rounded-full" style={{ background: accent }} aria-hidden="true"></span>
+      {meta || 'Side project'}
+    </span>
+    {href && <span class="text-paper/40 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-paper" aria-hidden="true">↗</span>}
+  </div>
+
+  {isLarge && (
+    <div class="relative mt-6 aspect-video w-full overflow-hidden rounded-xl bg-paper/5 ring-1 ring-paper/10">
+      {data.video ? (
+        <video class="h-full w-full object-cover" src={data.video} poster={data.poster} muted loop playsinline autoplay preload="none" />
+      ) : (
+        <p class="absolute inset-0 grid place-items-center font-mono text-xs text-paper/30">demo video goes here</p>
+      )}
+    </div>
+  )}
+
+  <h3 class={`headline mt-auto pt-8 text-paper ${isLarge ? 'text-[length:var(--text-title)]' : 'text-3xl'}`}>
+    {href ? (
+      <a href={href} class="bento-link" target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>
+        {data.title}
+      </a>
+    ) : data.title}
+  </h3>
+
+  <p class={`mt-3 text-paper/65 ${isLarge ? 'max-w-xl text-base' : 'text-sm'}`}>{data.summary}</p>
+
+  <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Stack">
+    {stack.map((t) => <li class="rounded-md bg-paper/[0.07] px-2 py-1 font-mono text-[11px] text-paper/70">{t}</li>)}
+  </ul>
+</SpotlightCard>

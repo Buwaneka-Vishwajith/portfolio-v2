@@ -21,6 +21,9 @@ const projects = defineCollection({
     featured: z.boolean().default(false),
     order: z.number().default(99), // lower = shown first
     frame: z.enum(['teal', 'cobalt', 'coral', 'lilac']).default('teal'),
+    // Tile size in the Selected work bento grid.
+    // large = 2 x 2, wide = 2 x 1, tall = 1 x 2, small = 1 x 1
+    bento: z.enum(['large', 'wide', 'tall', 'small']).default('small'),
     video: z.string().optional(), // e.g. "/media/efoods.mp4"
     poster: z.string().optional(), // still image shown before the video loads
   }),
