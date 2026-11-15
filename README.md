@@ -66,5 +66,6 @@ when you scroll to the Playground.
 
 ## Deploy
 
-Vercel builds Astro with no extra configuration: import the repo (or point the existing project
-at the `v2` branch). The v1 GitHub Actions workflow isn't needed.
+This is a standalone project, separate from the old portfolio repo. Push it to a new GitHub repo,
+then import that repo in Vercel as a new project. Vercel detects Astro and needs no extra
+configuration or GitHub Actions workflow.
