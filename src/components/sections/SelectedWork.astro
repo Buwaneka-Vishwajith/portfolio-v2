@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from '../ui/ProjectCard.astro';
+
+const featured = (await getCollection('projects', ({ data }) => data.featured))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<section id="work" class="section section-dark" aria-labelledby="work-title">
+  <header class="mb-16 text-center">
+    <p class="eyebrow mb-4">Things I've designed, built and shipped.</p>
+    <h2 id="work-title" class="headline text-[length:var(--text-display)]" data-split>
+      Selected <span class="headline-serif">work</span>
+    </h2>
+  </header>
+
+  <!-- Phase 3: these cards pin and stack on scroll -->
+  <div class="mx-auto flex max-w-5xl flex-col gap-10" data-card-stack>
+    {featured.map((project) => <ProjectCard project={project} />)}
+  </div>
+</section>

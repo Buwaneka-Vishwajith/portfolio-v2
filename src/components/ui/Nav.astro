@@ -1,0 +1,24 @@
+---
+import { nav, site } from '../../data/site';
+---
+
+<header class="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-4 py-4 sm:px-6" transition:persist>
+  <!-- Logo: swap this text for the hand-lettered SVG once it's ready -->
+  <a href="/" class="pill bg-paper/90 font-serif text-2xl normal-case italic tracking-normal leading-none text-ink ring-1 ring-ink/10 backdrop-blur" aria-label={`${site.name}, home`}>
+    {site.shortName}
+  </a>
+
+  <nav aria-label="Main" class="absolute left-1/2 -translate-x-1/2 hidden sm:block">
+    <ul class="flex gap-1 rounded-xl bg-paper/90 p-1 shadow-sm ring-1 ring-ink/10 backdrop-blur">
+      {nav.map((item) => (
+        <li>
+          <a href={item.href} class="pill text-ink hover:bg-ink hover:text-paper">{item.label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <a href="/#contact" class="pill bg-teal text-ink hover:-translate-y-0.5">
+    <span aria-hidden="true">●</span> Contact
+  </a>
+</header>

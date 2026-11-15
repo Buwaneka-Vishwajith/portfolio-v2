@@ -1,0 +1,44 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const featured = (await getCollection('projects', ({ data }) => data.featured))
+    .sort((a, b) => a.data.order - b.data.order);
+  return featured.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, next: featured[(i + 1) % featured.length] },
+  }));
+}
+
+const { project, next } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={data.title} description={data.summary}>
+  <article>
+    <header class="section pt-40 text-center">
+      <p class="eyebrow mb-4">{[data.year, data.team].filter(Boolean).join(' · ')}</p>
+      <h1 class="headline text-[length:var(--text-hero)]">{data.title}</h1>
+      <p class="mx-auto mt-6 max-w-2xl text-lg text-ink-soft">{data.summary}</p>
+      <dl class="mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-x-10 gap-y-4 text-sm">
+        {data.role && <div><dt class="font-mono text-xs uppercase text-ink-soft">Role</dt><dd>{data.role}</dd></div>}
+        <div><dt class="font-mono text-xs uppercase text-ink-soft">Stack</dt><dd>{data.stack.join(', ')}</dd></div>
+      </dl>
+      <div class="mt-8 flex justify-center gap-3">
+        {data.github && <a class="pill bg-ink text-paper" href={data.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>}
+        {data.live && <a class="pill bg-teal text-ink" href={data.live}>Live demo</a>}
+      </div>
+    </header>
+
+    <div class="case-body mx-auto max-w-3xl px-6 pb-24">
+      <Content />
+    </div>
+  </article>
+
+  <a href={`/work/${next.id}`} class="section section-dark block text-center hover:text-teal">
+    <p class="eyebrow mb-4">Next project</p>
+    <p class="headline text-[length:var(--text-display)]">{next.data.title} →</p>
+  </a>
+</BaseLayout>

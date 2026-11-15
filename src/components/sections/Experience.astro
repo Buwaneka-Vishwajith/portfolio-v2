@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+
+// Edit src/data/experience.json to add, change or remove roles.
+const roles = (await getCollection('experience', ({ data }) => !data.hidden))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const frames = ['border-teal', 'border-cobalt', 'border-coral', 'border-lilac'];
+---
+
+<section id="experience" class="section" aria-labelledby="experience-title">
+  <header class="mb-16 text-center">
+    <p class="eyebrow mb-4">Where I've worked</p>
+    <h2 id="experience-title" class="headline text-[length:var(--text-display)]" data-split>
+      Experi<span class="headline-serif">ence</span>
+    </h2>
+  </header>
+
+  <!-- Phase 3: cards fan out from a stack as you scroll -->
+  <ol class="mx-auto grid max-w-6xl gap-6 md:grid-cols-3" data-fan>
+    {roles.map(({ data }, i) => (
+      <li class={`rounded-2xl border-[8px] bg-paper p-6 shadow-sm ${frames[i % frames.length]}`}>
+        <p class="font-mono text-xs uppercase tracking-wider text-ink-soft">{data.period}</p>
+        <h3 class="headline mt-3 text-3xl">{data.position}</h3>
+        <p class="mt-1 font-serif text-xl">@ {data.company}</p>
+        <ul class="mt-5 space-y-2 text-sm leading-relaxed text-ink-soft">
+          {data.description.map((line) => <li>— {line}</li>)}
+        </ul>
+        <ul class="mt-5 flex flex-wrap gap-2" aria-label="Technologies">
+          {data.technologies.map((t) => (
+            <li class="rounded-md bg-ink/5 px-2 py-1 font-mono text-[11px]">{t}</li>
+          ))}
+        </ul>
+      </li>
+    ))}
+  </ol>
+</section>

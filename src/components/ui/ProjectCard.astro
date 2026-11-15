@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { project: CollectionEntry<'projects'> }
+const { project } = Astro.props;
+const { data } = project;
+
+const frameClass = {
+  teal: 'border-teal',
+  cobalt: 'border-cobalt',
+  coral: 'border-coral',
+  lilac: 'border-lilac',
+}[data.frame];
+---
+
+<article class={`group relative overflow-hidden rounded-2xl border-[12px] bg-ink ${frameClass}`} data-card>
+  <a href={`/work/${project.id}`} class="block" aria-label={`${data.title} case study`}>
+    <div class="relative aspect-video w-full bg-paper/5">
+      {data.video ? (
+        <video
+          class="h-full w-full object-cover"
+          src={data.video}
+          poster={data.poster}
+          muted
+          loop
+          playsinline
+          preload="none"
+          data-autoplay
+        />
+      ) : (
+        <p class="absolute inset-0 grid place-items-center font-mono text-xs text-paper/40">demo video goes here</p>
+      )}
+      <h3 class="headline absolute inset-x-0 bottom-0 p-6 text-center text-[length:var(--text-title)] text-paper drop-shadow-lg">
+        {data.title}
+      </h3>
+    </div>
+  </a>
+  <div class="flex flex-wrap items-center justify-between gap-4 bg-ink p-5 text-paper">
+    <p class="max-w-xl text-sm text-paper/70">{data.summary}</p>
+    <ul class="flex flex-wrap gap-2 font-mono text-[11px] text-paper/60" aria-label="Stack">
+      {data.stack.slice(0, 4).map((t) => <li class="rounded bg-paper/10 px-2 py-1">{t}</li>)}
+    </ul>
+  </div>
+</article>

@@ -1,0 +1,14 @@
+---
+import { site } from '../../data/site';
+---
+
+<section id="contact" class="section section-dark text-center" aria-labelledby="contact-title">
+  <h2 id="contact-title" class="headline text-[length:var(--text-display)]" data-split>
+    Got something<br /><span class="headline-serif">to build?</span>
+  </h2>
+  <p class="mt-6 text-paper/70">Internships, junior roles or a project idea. My inbox is open.</p>
+  <div class="mt-10 flex flex-wrap justify-center gap-3">
+    <a class="pill bg-teal text-ink hover:-translate-y-0.5" href={`mailto:${site.email}`}>Email me</a>
+    <a class="pill ring-1 ring-paper/30 hover:bg-paper hover:text-ink" href={site.cv} download>Download CV</a>
+  </div>
+</section>

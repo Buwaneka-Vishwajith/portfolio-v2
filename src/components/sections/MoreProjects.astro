@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+
+const others = (await getCollection('projects', ({ data }) => !data.featured))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<section class="section" aria-labelledby="more-title">
+  <div class="mx-auto max-w-5xl">
+    <h2 id="more-title" class="headline mb-10 text-[length:var(--text-title)]">
+      More <span class="headline-serif">projects</span>
+    </h2>
+    <ul class="divide-y divide-ink/15 border-y border-ink/15">
+      {others.map(({ data }) => (
+        <li class="grid gap-2 py-6 sm:grid-cols-[1fr_2fr_7rem] sm:items-baseline sm:gap-8">
+          <h3 class="headline text-2xl">{data.title}</h3>
+          <div>
+            <p class="text-ink-soft">{data.summary}</p>
+            <p class="mt-2 font-mono text-xs text-ink-soft">{data.stack.join(' · ')}</p>
+          </div>
+          {data.github ? (
+            <a class="pill ring-1 ring-ink/20 hover:bg-ink hover:text-paper" href={data.github} target="_blank" rel="noopener noreferrer">
+              GitHub ↗
+            </a>
+          ) : <span />}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

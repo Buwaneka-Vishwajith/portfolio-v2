@@ -1,0 +1,14 @@
+---
+import { site } from '../../data/site';
+---
+
+<section class="section flex min-h-[100svh] flex-col items-center justify-center text-center" aria-labelledby="hero-title">
+  <p class="eyebrow mb-6" data-reveal>{site.role},<br />{site.location}</p>
+  <h1 id="hero-title" class="headline text-[length:var(--text-hero)]" data-split>
+    Building the web<br />
+    <span class="headline-serif">with an engineer's mind</span>
+  </h1>
+  <a href="#work" class="mt-10 inline-flex items-center gap-2 font-serif text-xl" data-reveal>
+    See my work <span class="pill bg-teal p-1.5 text-ink" aria-hidden="true">↓</span>
+  </a>
+</section>

@@ -1,0 +1,41 @@
+[
+  {
+    "id": "internship",
+    "company": "Company name",
+    "position": "Software Engineer (Internship)",
+    "period": "2025 — Present",
+    "order": 1,
+    "description": [
+      "What you built or improved",
+      "A result, ideally with a number",
+      "A tool, process or team you worked with"
+    ],
+    "technologies": ["Tech 1", "Tech 2", "Tech 3"],
+    "hidden": false
+  },
+  {
+    "id": "aasl",
+    "company": "Airport & Aviation Services Sri Lanka",
+    "position": "Mechatronics Engineer (Internship)",
+    "period": "Jan 2023 — Mar 2023",
+    "order": 2,
+    "description": [
+      "Developed a 3D model of a two-way conveyor belt system using SolidWorks to enhance baggage handling efficiency"
+    ],
+    "technologies": ["AutoCAD", "SolidWorks"],
+    "hidden": false
+  },
+  {
+    "id": "fiverr",
+    "company": "Fiverr",
+    "position": "Video / Motion Graphics Designer",
+    "period": "2020 — 2021",
+    "order": 3,
+    "description": [
+      "Delivered 20+ professional video projects for international clients across various industries",
+      "Crafted dynamic motion graphics and visual effects that elevated brand storytelling"
+    ],
+    "technologies": ["After Effects", "Premiere Pro", "Photoshop"],
+    "hidden": false
+  }
+]
