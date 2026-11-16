@@ -1,4 +1,11 @@
 ---
+import { getImage } from 'astro:assets';
+import SpideyTrail from '../react/SpideyTrail.jsx';
+import spideyPng from '../../assets/spidey.png';
+// Small WebP for the bento grid's image trail (shown at 64px, so 160px covers retina).
+const spidey = await getImage({ src: spideyPng, format: 'webp', width: 160, quality: 85 });
+import BlurText from '../react/BlurText/BlurText.jsx';
+import ProximityText from '../react/ProximityText.jsx';
 import BentoCard from '../ui/BentoCard.astro';
 import SeeAllCard from '../ui/SeeAllCard.astro';
 import { getAllProjects, getHomeProjects } from '../../lib/projects';
@@ -20,16 +27,32 @@ const lgSpan = ({ 1: 'lg:row-span-2', 2: '', 3: 'lg:col-span-3', 4: 'lg:col-span
 const seeAllSpan = `${mdSpan} ${lgSpan}`;
 ---
 
-<section id="work" class="section" aria-labelledby="work-title">
+<section id="work" class="section pb-[clamp(2.5rem,6vw,5rem)]" aria-labelledby="work-title">
   <header class="mb-16 text-center">
-    <p class="eyebrow mb-4">Things I've designed, built and shipped.</p>
+    <BlurText
+      client:visible
+      text="Things I've designed & built."
+      className="eyebrow mb-4 justify-center"
+      effect="blur"
+      direction="top"
+      delay={60}
+      stepDuration={0.35}
+      blur={8}
+      distance={16}
+    />
     <h2 id="work-title" class="headline text-[length:var(--text-display)]" data-split>
-      Selected <span class="headline-serif">work</span>
+      <ProximityText client:visible text="Selected" /> <span class="headline-serif"><ProximityText client:visible text="work" variant="serif" /></span>
     </h2>
   </header>
 
-  <div class="bento mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-    {home.map((project, i) => <BentoCard project={project} size={slotSizes[i]} />)}
-    <SeeAllCard total={total} span={seeAllSpan} />
+  <div class="relative mx-auto max-w-6xl" data-trail-zone>
+    <div class="bento grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {home.map((project, i) => <BentoCard project={project} size={slotSizes[i]} />)}
+      <SeeAllCard total={total} span={seeAllSpan} />
+    </div>
+    <!-- Spidey trail over the cards; it never blocks clicks. -->
+    <div class="pointer-events-none absolute inset-0 z-20" aria-hidden="true">
+      <SpideyTrail client:visible src={spidey.src} />
+    </div>
   </div>
 </section>

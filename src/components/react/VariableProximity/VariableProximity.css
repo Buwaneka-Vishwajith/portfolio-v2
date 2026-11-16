@@ -1,0 +1,6 @@
+/* React Bits VariableProximity.
+   The demo's Google Fonts import (Roboto Flex) is removed: the headings use the site's own
+   Archivo Variable (wdth + wght axes), so there is no extra font download. */
+.variable-proximity {
+  font-family: inherit;
+}

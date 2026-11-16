@@ -32,8 +32,8 @@ Each role is one object in `src/data/experience.json`:
 {
   "id": "internship",
   "company": "Company name",
-  "position": "Software Engineer (Internship)",
-  "period": "2025 — Present",
+  "position": "Software Engineer (Backend)",
+  "period": "2025 — 2026",
   "order": 1,
   "description": ["…", "…"],
   "technologies": ["…"],

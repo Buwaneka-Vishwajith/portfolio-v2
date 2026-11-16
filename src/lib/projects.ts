@@ -22,6 +22,8 @@ export interface Project {
   bento: Bento;
   video?: string;
   poster?: string;
+  /** A built-in animated demo for the big tile instead of a video, e.g. 'nudge'. */
+  demo?: string;
   order: number;
   updated?: string;
 }
@@ -47,6 +49,7 @@ interface RepoOverride {
   hidden?: boolean;
   video?: string;
   poster?: string;
+  demo?: string;
 }
 
 export const HOME_SLOTS = 5;
@@ -114,6 +117,7 @@ export async function getAllProjects(): Promise<Project[]> {
         bento: t.bento ?? 'small',
         video: t.video,
         poster: t.poster,
+        demo: t.demo,
         order: t.order ?? 1000 + i,
         updated: r.pushed,
       };

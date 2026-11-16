@@ -1,6 +1,7 @@
 ---
 import type { Project } from '../../lib/projects';
 import SpotlightCard from '../react/SpotlightCard/SpotlightCard.jsx';
+import NudgeDemo from './NudgeDemo.astro';
 
 type Size = 'large' | 'wide' | 'tall' | 'small';
 
@@ -56,8 +57,7 @@ const stack = isLarge ? data.stack.slice(0, 6) : data.stack.slice(0, 3);
   style={{ '--spotlight-card-surface': 'rgba(255, 255, 255, 0.5)' }}
 >
   <div class="flex items-center justify-between gap-4">
-    <span class="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-ink-soft">
-      <span class="h-2 w-2 rounded-full" style={{ background: accent }} aria-hidden="true"></span>
+    <span class="font-mono text-[11px] uppercase tracking-wider text-ink-soft">
       {meta || 'Side project'}
     </span>
     {href && <span class="text-ink/40 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink" aria-hidden="true">↗</span>}
@@ -65,7 +65,9 @@ const stack = isLarge ? data.stack.slice(0, 6) : data.stack.slice(0, 3);
 
   {isLarge && (
     <div class="relative mt-6 aspect-video w-full overflow-hidden rounded-xl bg-ink/5 ring-1 ring-ink/10">
-      {data.video ? (
+      {data.demo === 'nudge' ? (
+        <NudgeDemo />
+      ) : data.video ? (
         <video class="h-full w-full object-cover" src={data.video} poster={data.poster} muted loop playsinline autoplay preload="none" />
       ) : (
         <p class="absolute inset-0 grid place-items-center font-mono text-xs text-ink/30">demo video goes here</p>

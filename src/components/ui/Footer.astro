@@ -7,12 +7,11 @@ const year = new Date().getFullYear();
   <div class="grid gap-10 border-t border-paper/15 pt-10 sm:grid-cols-3">
     <div>
       <p class="font-serif text-3xl italic">{site.shortName}</p>
-      <p class="mt-2 text-sm text-paper/60">{site.role} · {site.location}</p>
+      <p class="mt-2 text-sm text-paper/60">{site.role}</p>
     </div>
     <nav aria-label="Footer">
       <ul class="space-y-2 text-sm">
         {nav.map((item) => <li><a class="hover:text-teal" href={item.href}>{item.label}</a></li>)}
-        <li><a class="hover:text-teal" href={site.cv} download>Download CV</a></li>
       </ul>
     </nav>
     <ul class="space-y-2 text-sm">
@@ -22,5 +21,5 @@ const year = new Date().getFullYear();
       ))}
     </ul>
   </div>
-  <p class="mt-12 text-xs text-paper/40">© {year} {site.name}. Built with Astro.</p>
+  <p class="mt-12 text-xs text-paper/40">© {year} {site.name}</p>
 </footer>

@@ -3,12 +3,12 @@
 export const site = {
   name: 'Buwaneka Vishwajith',
   shortName: 'Buwaneka',
-  role: 'Full-stack engineer',
+  role: 'Full stack engineer',
   location: 'Kandy, Sri Lanka',
   email: 'buwaneka10000@gmail.com',
   cv: '/Buwaneka_Senarathne_cv.pdf',
   description:
-    'Buwaneka Vishwajith — full-stack engineer from Kandy, Sri Lanka. From mechanical engineering to building web and cloud systems.',
+    'Buwaneka Vishwajith — full stack engineer from Kandy, Sri Lanka. From mechanical engineering to building web and cloud systems.',
 };
 
 export const socials = [

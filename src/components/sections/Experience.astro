@@ -1,4 +1,6 @@
 ---
+import BlurText from '../react/BlurText/BlurText.jsx';
+import ProximityText from '../react/ProximityText.jsx';
 import { getCollection } from 'astro:content';
 import ExperienceMenu from '../react/ExperienceMenu.jsx';
 // The previous folder design is kept in src/components/react/ExperienceFolder.jsx
@@ -11,11 +13,21 @@ const roles = (await getCollection('experience', ({ data }) => !data.hidden))
   .map(({ id, data }) => ({ id, ...data }));
 ---
 
-<section id="experience" class="section" aria-labelledby="experience-title">
+<section id="experience" class="section py-[clamp(2.5rem,6vw,5rem)]" aria-labelledby="experience-title">
   <header class="mb-12 text-center">
-    <p class="eyebrow mb-4">Where I've worked</p>
+    <BlurText
+      client:visible
+      text="Work"
+      className="eyebrow mb-4 justify-center"
+      effect="blur"
+      direction="top"
+      delay={60}
+      stepDuration={0.35}
+      blur={8}
+      distance={16}
+    />
     <h2 id="experience-title" class="headline text-[length:var(--text-display)]" data-split>
-      Experi<span class="headline-serif">ence</span>
+      <ProximityText client:visible text="Experi" /><span class="headline-serif"><ProximityText client:visible text="ence" variant="serif" /></span>
     </h2>
   </header>
 

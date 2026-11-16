@@ -1,4 +1,6 @@
 ---
+import BlurText from '../react/BlurText/BlurText.jsx';
+import ProximityText from '../react/ProximityText.jsx';
 import MemoryGame from '../react/memory/MemoryGame.jsx';
 // The game's rules live in src/components/react/memory/useMemoryGame.js, moved
 // unchanged from the original src/components/react/Game.jsx (kept, not used).
@@ -10,11 +12,20 @@ import MemoryGame from '../react/memory/MemoryGame.jsx';
 <section id="playground" class="section" aria-labelledby="playground-title">
   <header class="mb-12 text-center">
     <h2 id="playground-title" class="headline text-[length:var(--text-display)]" data-split>
-      Bored of <span class="headline-serif">scrolling?</span>
+      <ProximityText client:visible text="Bored" /> <span class="headline-serif"><ProximityText client:visible text="already?" variant="serif" /></span>
     </h2>
-    <p class="mt-6 text-ink-soft">
-      Try the <b class="text-ink">memory game</b> I built. The grid grows and the patterns get harder every level.
-    </p>
+    <BlurText
+      client:visible
+      text="I watched people sweat over the GTA V RP thermite hack, so I made my own. Try it!"
+      className="eyebrow mx-auto mt-6 max-w-3xl justify-center"
+      boldClassName="text-[#fc734d]"
+      effect="blur"
+      direction="top"
+      delay={30}
+      stepDuration={0.35}
+      blur={8}
+      distance={16}
+    />
   </header>
 
   <MemoryGame client:visible />

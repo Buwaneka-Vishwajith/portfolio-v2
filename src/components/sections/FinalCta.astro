@@ -1,14 +1,43 @@
 ---
 import { site } from '../../data/site';
+import FooterRays from '../react/FooterRays.jsx';
 ---
 
-<section id="contact" class="section section-dark text-center" aria-labelledby="contact-title">
+<section id="contact" class="section section-dark relative isolate text-center" aria-labelledby="contact-title">
+  <!-- Light rays from the top-right of this dark block, reaching down through the footer.
+       The script below stretches this layer to the footer's bottom; the footer turns transparent
+       on pages with this section (see global.css), so it's one continuous dark area. -->
+  <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-full bg-ink" data-cta-rays aria-hidden="true">
+    <FooterRays client:visible />
+  </div>
   <h2 id="contact-title" class="headline text-[length:var(--text-display)]" data-split>
     Got something<br /><span class="headline-serif">to build?</span>
   </h2>
-  <p class="mt-6 text-paper/70">Internships, junior roles or a project idea. My inbox is open.</p>
+  <p class="mt-6 text-paper/70">Developer roles or a project idea?</p>
   <div class="mt-10 flex flex-wrap justify-center gap-3">
-    <a class="pill bg-teal text-ink hover:-translate-y-0.5" href={`mailto:${site.email}`}>Email me</a>
-    <a class="pill ring-1 ring-paper/30 hover:bg-paper hover:text-ink" href={site.cv} download>Download CV</a>
+    <a class="pill ring-1 ring-paper/30 hover:bg-paper hover:text-ink" href={`mailto:${site.email}`}>Email me</a>
   </div>
 </section>
+
+<script>
+  // Stretch the rays layer from the top of this section to the bottom of the footer.
+  const fit = () => {
+    const layer = document.querySelector<HTMLElement>('[data-cta-rays]');
+    const section = layer?.parentElement;
+    const footer = document.querySelector('body > footer');
+    if (!layer || !section || !footer) return;
+    const height = footer.getBoundingClientRect().bottom - section.getBoundingClientRect().top;
+    layer.style.height = `${Math.max(section.offsetHeight, Math.round(height))}px`;
+  };
+  let observer: ResizeObserver | undefined;
+  document.addEventListener('astro:page-load', () => {
+    observer?.disconnect();
+    fit();
+    const layer = document.querySelector('[data-cta-rays]');
+    const footer = document.querySelector('body > footer');
+    if (!layer || !footer) return;
+    observer = new ResizeObserver(fit);
+    observer.observe(layer.parentElement!);
+    observer.observe(footer);
+  });
+</script>

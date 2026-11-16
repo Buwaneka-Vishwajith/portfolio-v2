@@ -1,10 +1,16 @@
 ---
 import HeroWarp from '../react/HeroWarp.jsx';
+import HeroGrainient from '../react/HeroGrainient.jsx';
 ---
 
-<section class="section flex min-h-[100svh] flex-col items-center justify-center text-center" aria-labelledby="hero-title">
+<section class="section relative isolate flex min-h-[100svh] flex-col items-center justify-center text-center" aria-labelledby="hero-title">
+  <!-- Grainy gradient behind the hero; the bottom fades into the page. -->
+  <div class="pointer-events-none absolute inset-0 -z-10 [mask-image:linear-gradient(to_bottom,#000_70%,transparent)]" aria-hidden="true">
+    <HeroGrainient client:only="react" />
+  </div>
+
   <!-- Real heading for search engines and screen readers. -->
-  <h1 id="hero-title" class="sr-only">text: "ENGINEER WITH A DESIGNER'S EYE",</h1>
+  <h1 id="hero-title" class="sr-only">Engineer with a designer's eye</h1>
 
   <!-- The visible headline: WebGL warp text (hover it, click it). -->
   <div class="w-full max-w-[1400px] text-ink" aria-hidden="true">

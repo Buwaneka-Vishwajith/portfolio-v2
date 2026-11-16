@@ -1,4 +1,6 @@
 ---
+import BlurText from '../react/BlurText/BlurText.jsx';
+import ProximityText from '../react/ProximityText.jsx';
 import ArticleCarousel from '../react/ArticleCarousel.jsx';
 import { getSelectedArticles, formatMonth } from '../../lib/articles';
 import { mediumProfile } from '../../data/articles';
@@ -15,11 +17,21 @@ const articles = getSelectedArticles().map((a) => ({
 ---
 
 {articles.length > 0 && (
-  <section id="writing" class="section" aria-labelledby="writing-title">
+  <section id="writing" class="section pt-[clamp(2.5rem,6vw,5rem)]" aria-labelledby="writing-title">
     <header class="mb-6 text-center">
-      <p class="eyebrow mb-4">Notes from building things</p>
+      <BlurText
+      client:visible
+      text="Notes"
+      className="eyebrow mb-4 justify-center"
+      effect="blur"
+      direction="top"
+      delay={60}
+      stepDuration={0.35}
+      blur={8}
+      distance={16}
+    />
       <h2 id="writing-title" class="headline text-[length:var(--text-display)]" data-split>
-        Writ<span class="headline-serif">ing</span>
+        <ProximityText client:visible text="Occasionally," /> <span class="headline-serif"><ProximityText client:visible text="I write" variant="serif" /></span>
       </h2>
     </header>
 

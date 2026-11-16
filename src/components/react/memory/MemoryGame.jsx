@@ -21,8 +21,6 @@ export default function MemoryGame() {
     return 'idle';
   };
 
-  const progress = playing || lost ? clicked.length / patternLength : 0;
-
   return (
     <div className="memory-game" data-state={gameState}>
       <div
@@ -45,11 +43,7 @@ export default function MemoryGame() {
         ))}
       </div>
 
-      <div className="memory-game__bar" aria-hidden="true">
-        <span style={{ transform: `scaleX(${progress})` }} />
-      </div>
-
-      <div className="memory-game__foot" aria-live="polite">
+      <div className="memory-game__foot mt-5" aria-live="polite">
         {gameState === 'waiting' && (
           <button type="button" className="memory-game__start" onClick={startGame}>
             {COPY.start}

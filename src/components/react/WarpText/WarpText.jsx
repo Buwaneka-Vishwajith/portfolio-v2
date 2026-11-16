@@ -1,5 +1,5 @@
 // WarpText from React Bits (https://reactbits.dev). Only change: the optional
-// `lineFonts` prop, marked [portfolio] in buildTextCanvas.
+// `lineFonts` and `glyphs` (inline icons) props, marked [portfolio] in buildTextCanvas.
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
@@ -180,19 +180,61 @@ const getLuminance = color => {
   return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
 };
 
-const measureLine = (ctx, line, letterSpacing) => {
+// [portfolio] Inline icons: props.glyphs maps a placeholder character (e.g. '\uE000') to a loaded
+// image ({ image, scale, trim }). The icon is sized from the current font's cap height, drawn in the
+// text colour, and warps along with the letters.
+const capMetrics = ctx => {
+  const m = ctx.measureText('H');
+  const ascent = m.actualBoundingBoxAscent || 0;
+  const descent = m.actualBoundingBoxDescent || 0;
+  return { cap: ascent + descent, center: (descent - ascent) / 2 };
+};
+
+const glyphBox = (ctx, glyph) => {
+  const { cap } = capMetrics(ctx);
+  const size = cap * (glyph.scale ?? 1.6);
+  const trim = glyph.trim ?? 0;
+  return { size, advance: size * (1 - trim * 2), trim: size * trim };
+};
+
+const charWidth = (ctx, char, glyphs) => {
+  const glyph = glyphs?.[char];
+  return glyph ? glyphBox(ctx, glyph).advance : ctx.measureText(char).width;
+};
+
+const measureLine = (ctx, line, letterSpacing, glyphs) => {
   const chars = Array.from(line);
-  const textWidth = chars.reduce((width, char) => width + ctx.measureText(char).width, 0);
+  const textWidth = chars.reduce((width, char) => width + charWidth(ctx, char, glyphs), 0);
   return textWidth + Math.max(0, chars.length - 1) * letterSpacing;
 };
 
-const drawLine = (ctx, line, x, y, letterSpacing) => {
+const drawGlyph = (ctx, glyph, x, y) => {
+  const { size, trim } = glyphBox(ctx, glyph);
+  const { center } = capMetrics(ctx);
+  // Recolour the icon to the text colour on a scratch canvas, then draw it in place.
+  const scale = ctx.getTransform().a || 1;
+  const px = Math.max(1, Math.ceil(size * scale));
+  const tint = document.createElement('canvas');
+  tint.width = px;
+  tint.height = px;
+  const tctx = tint.getContext('2d');
+  if (!tctx) return;
+  tctx.drawImage(glyph.image, 0, 0, px, px);
+  tctx.globalCompositeOperation = 'source-in';
+  tctx.fillStyle = ctx.fillStyle;
+  tctx.fillRect(0, 0, px, px);
+  ctx.drawImage(tint, x - trim, y + center - size / 2, size, size);
+};
+
+const drawLine = (ctx, line, x, y, letterSpacing, glyphs) => {
   const chars = Array.from(line);
-  let cursor = x - measureLine(ctx, line, letterSpacing) / 2;
+  let cursor = x - measureLine(ctx, line, letterSpacing, glyphs) / 2;
 
   chars.forEach((char, index) => {
-    ctx.fillText(char, cursor, y);
-    cursor += ctx.measureText(char).width + (index === chars.length - 1 ? 0 : letterSpacing);
+    const glyph = glyphs?.[char];
+    if (glyph) drawGlyph(ctx, glyph, cursor, y);
+    else ctx.fillText(char, cursor, y);
+    cursor += charWidth(ctx, char, glyphs) + (index === chars.length - 1 ? 0 : letterSpacing);
   });
 };
 
@@ -256,7 +298,7 @@ const buildTextCanvas = ({ container, width, height, dpr, props }) => {
   };
   const measureAt = index => {
     applyFont(index);
-    return measureLine(ctx, lines[index], lineSpacing(index));
+    return measureLine(ctx, lines[index], lineSpacing(index), props.glyphs);
   };
 
   const maxWidth = width * 0.86;
@@ -274,7 +316,7 @@ const buildTextCanvas = ({ container, width, height, dpr, props }) => {
   const startY = height / 2 - (lineHeight * (lines.length - 1)) / 2;
   lines.forEach((line, index) => {
     applyFont(index);
-    drawLine(ctx, line, width / 2, startY + index * lineHeight, lineSpacing(index));
+    drawLine(ctx, line, width / 2, startY + index * lineHeight, lineSpacing(index), props.glyphs);
   });
 
   return { canvas, ink };
@@ -314,6 +356,7 @@ const WarpText = ({
   letterSpacing = '-0.06em',
   lineHeight = 0.9,
   lineFonts,
+  glyphs,
   className = '',
   style
 }) => {
@@ -327,6 +370,7 @@ const WarpText = ({
     letterSpacing,
     lineHeight,
     lineFonts,
+    glyphs,
     warpStrength,
     warpScale,
     speed,
@@ -353,6 +397,7 @@ const WarpText = ({
       letterSpacing,
       lineHeight,
       lineFonts,
+      glyphs,
       warpStrength,
       warpScale,
       speed,
@@ -377,6 +422,7 @@ const WarpText = ({
     letterSpacing,
     lineHeight,
     lineFonts,
+    glyphs,
     warpStrength,
     warpScale,
     speed,
@@ -393,7 +439,7 @@ const WarpText = ({
 
   useEffect(() => {
     contextRef.current?.rasterize();
-  }, [text, color, fontSize, fontWeight, fontFamily, letterSpacing, lineHeight, lineFonts]);
+  }, [text, color, fontSize, fontWeight, fontFamily, letterSpacing, lineHeight, lineFonts, glyphs]);
 
   useEffect(() => {
     const container = containerRef.current;
