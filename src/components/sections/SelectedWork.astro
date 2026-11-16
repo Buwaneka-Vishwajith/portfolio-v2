@@ -1,5 +1,6 @@
 ---
-import { getImage } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
+import crown from '../../assets/crown.png';
 import SpideyTrail from '../react/SpideyTrail.jsx';
 import spideyPng from '../../assets/spidey.png';
 // Small WebP for the bento grid's image trail (shown at 64px, so 160px covers retina).
@@ -41,7 +42,16 @@ const seeAllSpan = `${mdSpan} ${lgSpan}`;
       distance={16}
     />
     <h2 id="work-title" class="headline text-[length:var(--text-display)]" data-split>
-      <ProximityText client:visible text="Selected" /> <span class="headline-serif"><ProximityText client:visible text="work" variant="serif" /></span>
+      <ProximityText client:visible text="Selected" /> <span class="headline-serif"><span class="relative inline-block"><ProximityText client:visible text="work" variant="serif" /><Image
+          src={crown}
+          alt=""
+          aria-hidden="true"
+          format="webp"
+          widths={[64, 128]}
+          sizes="(min-width: 1720px) 62px, 3.6vw"
+          quality={85}
+          class="sticker-pop absolute -top-[0.54em] -right-[0.4em] h-[1.1em] w-[1.1em] rotate-[30deg] select-none"
+        /></span></span>
     </h2>
   </header>
 

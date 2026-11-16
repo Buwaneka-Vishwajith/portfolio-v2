@@ -80,8 +80,9 @@ export async function getAllProjects(): Promise<Project[]> {
     year: data.year,
     meta: data.team,
     stack: data.stack,
-    href: data.featured ? `/work/${id}` : data.github,
-    external: !data.featured,
+    // Every card opens the project's GitHub repo (case-study pages are no longer linked).
+    href: data.github ?? data.live,
+    external: Boolean((data.github ?? data.live)?.startsWith('http')),
     live: data.live,
     frame: data.frame,
     bento: data.bento,

@@ -31,13 +31,9 @@ const span = {
 
 const isLarge = size === 'large';
 
-// Featured .mdx projects open their case study; everything else goes to GitHub.
+// Every card opens the project's GitHub repo. Top-left shows only the year.
 const { href, external } = data;
-const meta = [data.year, data.meta].filter(Boolean).join(' · ');
-// Only show a separate "Live demo" link when it goes somewhere other than the card itself.
-const live = data.live && data.live !== href ? data.live : undefined;
-const liveExternal = live?.startsWith('http');
-const stack = isLarge ? data.stack.slice(0, 6) : data.stack.slice(0, 3);
+const meta = data.year;
 ---
 
 <SpotlightCard
@@ -85,18 +81,4 @@ const stack = isLarge ? data.stack.slice(0, 6) : data.stack.slice(0, 3);
 
   <p class={`mt-3 text-ink-soft ${isLarge ? 'max-w-xl text-base' : 'text-sm'}`}>{data.summary}</p>
 
-  <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Stack">
-    {stack.map((t) => <li class="rounded-md bg-ink/[0.05] px-2 py-1 font-mono text-[11px] text-ink-soft">{t}</li>)}
-  </ul>
-
-  {live && (
-    <a
-      href={live}
-      class="relative z-[3] mt-4 self-start font-mono text-[11px] uppercase tracking-wider text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
-      target={liveExternal ? '_blank' : undefined}
-      rel={liveExternal ? 'noopener noreferrer' : undefined}
-    >
-      Live demo ↗
-    </a>
-  )}
 </SpotlightCard>

@@ -1,4 +1,10 @@
 ---
+import { Image } from 'astro:assets';
+// Pac-Man stickers: copies of src/assets/pac*.png cropped to the character, so they all show at the same height.
+import pac from '../../assets/pacman/pac.png';
+import pac2 from '../../assets/pacman/pac2.png';
+import pac3 from '../../assets/pacman/pac3.png';
+import pac4 from '../../assets/pacman/pac4.png';
 import BlurText from '../react/BlurText/BlurText.jsx';
 import ProximityText from '../react/ProximityText.jsx';
 import { getCollection } from 'astro:content';
@@ -26,8 +32,10 @@ const roles = (await getCollection('experience', ({ data }) => !data.hidden))
       blur={8}
       distance={16}
     />
-    <h2 id="experience-title" class="headline text-[length:var(--text-display)]" data-split>
-      <ProximityText client:visible text="Experi" /><span class="headline-serif"><ProximityText client:visible text="ence" variant="serif" /></span>
+    <!-- Pac-Man + ghost stickers sit on single letters, so the word is split into a few pieces.
+         Keep these on one line: any space between them would show up in the heading. -->
+    <h2 id="experience-title" class="headline text-[length:var(--text-display)]" aria-label="Experience" data-split>
+      <span class="relative inline-block"><ProximityText client:visible text="E" /><Image src={pac} alt="" aria-hidden="true" format="webp" widths={[48, 96]} sizes="(min-width: 1720px) 48px, 2.8vw" quality={85} class="sticker-pop absolute h-[0.42em] w-auto max-w-none -bottom-[0.06em] -left-[0.32em] select-none" /></span><ProximityText client:visible text="xper" /><span class="relative inline-block"><ProximityText client:visible text="i" /><Image src={pac2} alt="" aria-hidden="true" format="webp" widths={[48, 96]} sizes="(min-width: 1720px) 48px, 2.8vw" quality={85} class="sticker-pop absolute h-[0.42em] w-auto max-w-none -bottom-[0.44em] left-1/2 -translate-x-1/2 select-none" /></span><span class="headline-serif"><ProximityText client:visible text="e" variant="serif" /><span class="relative inline-block"><ProximityText client:visible text="n" variant="serif" /><Image src={pac4} alt="" aria-hidden="true" format="webp" widths={[48, 96]} sizes="(min-width: 1720px) 48px, 2.8vw" quality={85} class="sticker-pop absolute h-[0.42em] w-auto max-w-none -bottom-[0.1em] -left-[0.16em] select-none" /></span><ProximityText client:visible text="c" variant="serif" /><span class="relative inline-block"><ProximityText client:visible text="e" variant="serif" /><Image src={pac3} alt="" aria-hidden="true" format="webp" widths={[48, 96]} sizes="(min-width: 1720px) 48px, 2.8vw" quality={85} class="sticker-pop absolute h-[0.42em] w-auto max-w-none -top-[0.24em] -right-[0.3em] select-none" /></span></span>
     </h2>
   </header>
 
