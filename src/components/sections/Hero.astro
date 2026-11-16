@@ -1,20 +1,14 @@
 ---
-import { site } from '../../data/site';
 import HeroWarp from '../react/HeroWarp.jsx';
 ---
 
 <section class="section flex min-h-[100svh] flex-col items-center justify-center text-center" aria-labelledby="hero-title">
-  <p class="eyebrow mb-2" data-reveal>{site.role},<br />{site.location}</p>
-
   <!-- Real heading for search engines and screen readers. -->
-  <h1 id="hero-title" class="sr-only">Building the web with an engineer's mind</h1>
+  <h1 id="hero-title" class="sr-only">text: "ENGINEER WITH A DESIGNER'S EYE",</h1>
 
   <!-- The visible headline: WebGL warp text (hover it, click it). -->
   <div class="w-full max-w-[1400px] text-ink" aria-hidden="true">
     <HeroWarp client:load />
   </div>
 
-  <a href="#work" class="mt-4 inline-flex items-center gap-2 font-serif text-xl" data-reveal>
-    See my work <span class="pill bg-teal p-1.5 text-ink" aria-hidden="true">↓</span>
-  </a>
 </section>

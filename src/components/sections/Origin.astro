@@ -1,4 +1,13 @@
 ---
+import { Picture, Image, getImage } from 'astro:assets';
+import portrait from '../../assets/portrait.jpg';
+import gear from '../../assets/gear.png';
+import codeIcon from '../../assets/codenew.png';
+import PortraitFrame from '../react/PortraitFrame.jsx';
+// The DitherVeil version (react/PortraitVeil.jsx) is kept but unused.
+
+// Same-origin WebP for the lens effect (WebGL needs to read the pixels).
+const lensImage = await getImage({ src: portrait, format: 'webp', width: 800, quality: 80 });
 ---
 
 <section id="about" class="section" aria-labelledby="about-title">
@@ -6,7 +15,25 @@
     <div>
       <p class="eyebrow mb-4">About me</p>
       <h2 id="about-title" class="headline text-[length:var(--text-display)]" data-split>
-        From CAD<br /><span class="headline-serif">to code</span>
+        From <span class="relative inline-block">CAD<Image
+          src={gear}
+          alt=""
+          aria-hidden="true"
+          format="webp"
+          widths={[64, 128]}
+          sizes="(min-width: 1720px) 62px, 3.6vw"
+          quality={85}
+          class="sticker-pop absolute -top-[0.3em] -left-[0.14em] h-[0.55em] w-[0.55em] rotate-[-14deg] select-none"
+        /></span><br /><span class="headline-serif">to <span class="relative inline-block">code<Image
+          src={codeIcon}
+          alt=""
+          aria-hidden="true"
+          format="webp"
+          widths={[64, 128]}
+          sizes="(min-width: 1720px) 62px, 3.6vw"
+          quality={85}
+          class="sticker-pop absolute -right-[0.3em] -bottom-[0.2em] h-[0.55em] w-[0.55em] rotate-[-30deg] select-none"
+        /></span></span>
       </h2>
       <div class="mt-8 max-w-prose space-y-4 text-lg leading-relaxed text-ink-soft">
         <p>
@@ -23,10 +50,23 @@
     </div>
 
     <!-- Phase 3: gear outline that redraws itself into </> (DrawSVG) -->
-    <div class="relative mx-auto aspect-[4/5] w-full max-w-sm rounded-2xl border-[10px] border-lilac bg-ink/5" data-origin-art>
-      <p class="absolute inset-0 grid place-items-center font-mono text-sm text-ink-soft">photo / gear → &lt;/&gt;</p>
+    <div class="relative mx-auto aspect-[4/5] w-full max-w-sm rounded-2xl bg-ink/5" data-origin-art>
+      <!-- Astro turns the JPG into small WebP files at a few sizes; each screen downloads only the one it needs.
+           (AVIF came out larger than WebP for this photo, so WebP only.) -->
+      <Picture
+        src={portrait}
+        alt="Portrait of Buwaneka Vishwajith"
+        formats={['webp']}
+        widths={[400, 600, 800, 1079]}
+        sizes="(min-width: 768px) 364px, calc(100vw - 4rem)"
+        quality={80}
+        class="absolute inset-0 h-full w-full rounded-2xl object-cover"
+        pictureAttributes={{ class: 'contents' }}
+      />
+      <!-- Lens blur on the photo around the cursor (ShapeBlur's lens, applied to the image). -->
+      <PortraitFrame client:visible src={lensImage.src} />
       <span class="absolute -right-6 -bottom-6 rotate-[-12deg] rounded-full bg-coral px-5 py-3 font-display text-sm font-extrabold uppercase text-ink" data-sticker>
-        ex-mech eng
+        HELLOOO!
       </span>
     </div>
   </div>

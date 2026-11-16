@@ -1,8 +1,12 @@
 ---
 import SpotlightCard from '../react/SpotlightCard/SpotlightCard.jsx';
 
-interface Props { total: number }
-const { total } = Astro.props;
+interface Props {
+  total: number;
+  /** Grid span classes, so the tile can stretch to fill its row. */
+  span?: string;
+}
+const { total, span = '' } = Astro.props;
 ---
 
 <SpotlightCard
@@ -11,7 +15,7 @@ const { total } = Astro.props;
   spotlightColor="#2dd4bf"
   intensity={0}
   borderGlow={0}
-  className="bento-card group flex h-full flex-col justify-between"
+  className={`bento-card group flex h-full flex-col justify-between ${span}`}
   style={{ '--spotlight-card-surface': 'rgba(255, 255, 255, 0.5)' }}
 >
   <div class="flex items-center justify-between">

@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "sync:medium": "node scripts/sync-medium.mjs"
+    "sync:medium": "node scripts/sync-medium.mjs",
+    "sync:github": "node scripts/sync-github.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.1.6",

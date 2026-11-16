@@ -1,16 +1,16 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import type { Project } from '../../lib/projects';
 import SpotlightCard from '../react/SpotlightCard/SpotlightCard.jsx';
 
 type Size = 'large' | 'wide' | 'tall' | 'small';
 
 interface Props {
-  project: CollectionEntry<'projects'>;
+  project: Project;
   /** Overrides the project's own `bento` size (the homepage uses fixed slot sizes). */
   size?: Size;
 }
 const { project, size: sizeOverride } = Astro.props;
-const { data } = project;
+const data = project;
 const size: Size = sizeOverride ?? data.bento;
 
 // The spotlight takes each project's frame color.
@@ -30,10 +30,12 @@ const span = {
 
 const isLarge = size === 'large';
 
-// Featured projects open their case study; the rest go to GitHub.
-const href = data.featured ? `/work/${project.id}` : data.github;
-const external = !data.featured;
-const meta = [data.year, data.team].filter(Boolean).join(' · ');
+// Featured .mdx projects open their case study; everything else goes to GitHub.
+const { href, external } = data;
+const meta = [data.year, data.meta].filter(Boolean).join(' · ');
+// Only show a separate "Live demo" link when it goes somewhere other than the card itself.
+const live = data.live && data.live !== href ? data.live : undefined;
+const liveExternal = live?.startsWith('http');
 const stack = isLarge ? data.stack.slice(0, 6) : data.stack.slice(0, 3);
 ---
 
@@ -84,4 +86,15 @@ const stack = isLarge ? data.stack.slice(0, 6) : data.stack.slice(0, 3);
   <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Stack">
     {stack.map((t) => <li class="rounded-md bg-ink/[0.05] px-2 py-1 font-mono text-[11px] text-ink-soft">{t}</li>)}
   </ul>
+
+  {live && (
+    <a
+      href={live}
+      class="relative z-[3] mt-4 self-start font-mono text-[11px] uppercase tracking-wider text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
+      target={liveExternal ? '_blank' : undefined}
+      rel={liveExternal ? 'noopener noreferrer' : undefined}
+    >
+      Live demo ↗
+    </a>
+  )}
 </SpotlightCard>

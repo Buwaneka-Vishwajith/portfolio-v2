@@ -68,6 +68,23 @@ One `.mdx` file per project. The front matter at the top is checked against the 
 - `frame` → card border color: `teal`, `cobalt`, `coral` or `lilac`.
 - `video` → put the file in `public/media/` and set `video: /media/name.mp4`.
 
+### GitHub projects
+
+Show any of your public repos on the site without writing a file for each:
+
+1. On the repo's GitHub page, click the gear next to **About**. Add the topic `portfolio`,
+   and fill in the description and (if it's deployed) the website URL. Other topics become
+   the tech chips on the card.
+2. Run `npm run sync:github`. It saves every repo tagged `portfolio` to
+   `src/data/github.json` and prints their ids. Untagging hides a repo but keeps its data.
+3. Commit and push. Tagged repos appear on `/work`; put an id in `src/data/home.ts` to
+   feature one on the homepage.
+
+Optional tweaks per repo (title, summary, tile size, colour, order, hidden) and
+organisation-owned repos (`extraRepos`) go in `src/data/github-overrides.json`.
+A hand-written `.mdx` project with the same name or GitHub link always wins over the
+GitHub data, so you can upgrade any repo to a full case study later.
+
 ### Medium articles (Writing section)
 
 Medium has no free API for reading posts, so the site uses your public RSS feed. That feed only

@@ -1,0 +1,12 @@
+{
+  "$comment": "Optional tweaks for GitHub projects, keyed by repo id (the repo name, lower case). Every field is optional. title: card title. summary: replaces the GitHub description. video / poster: media for the big tile, e.g. /media/nudge.mp4. bento: large | wide | tall | small. frame: teal | cobalt | coral | lilac. order: position on /work (lower first; hand-written projects use 1-99). hidden: true hides it. extraRepos: org-owned repos to include, as 'owner/name'.",
+  "repos": {
+    "ai-browser-popup": {
+      "title": "Nudge"
+    },
+    "ddos-map": {
+      "title": "Threat Scope"
+    }
+  },
+  "extraRepos": []
+}

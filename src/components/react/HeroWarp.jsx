@@ -17,12 +17,12 @@ const SERIF = {
 // Wide screens: 2 lines. Phones: 3 lines, so the text stays large.
 const LAYOUTS = {
   wide: {
-    text: "BUILDING THE WEB\nWITH AN ENGINEER'S MIND",
+    text: "ENGINEER\nWITH A DESIGNER'S EYE",
     lineFonts: [DISPLAY, SERIF],
     height: 'clamp(220px, 24vw, 460px)',
   },
   narrow: {
-    text: "BUILDING THE WEB\nWITH AN\nENGINEER'S MIND",
+    text: "ENGINEER\nWITH A DESIGNER'S EYE",
     lineFonts: [DISPLAY, SERIF, SERIF],
     height: 'clamp(220px, 62vw, 340px)',
   },

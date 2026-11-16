@@ -9,6 +9,15 @@ const total = (await getAllProjects()).length;
 
 // Slot sizes are fixed: the first project is always the big tile.
 const slotSizes = ['large', 'small', 'small', 'small', 'small'] as const;
+
+// "See all projects" stretches to fill whatever is left of its row, so the grid
+// has no gaps with 1 to 5 projects. Literal class names so Tailwind keeps them.
+const n = home.length;
+// Tablet (2 columns): the small tiles pair up; an odd one out leaves one cell.
+const mdSpan = (n - 1) % 2 === 0 ? 'md:col-span-2' : 'md:col-span-1';
+// Desktop (3 columns): slots 2-3 sit beside the big tile, 4-5 go on the bottom row.
+const lgSpan = ({ 1: 'lg:row-span-2', 2: '', 3: 'lg:col-span-3', 4: 'lg:col-span-2', 5: '' } as Record<number, string>)[n];
+const seeAllSpan = `${mdSpan} ${lgSpan}`;
 ---
 
 <section id="work" class="section" aria-labelledby="work-title">
@@ -21,6 +30,6 @@ const slotSizes = ['large', 'small', 'small', 'small', 'small'] as const;
 
   <div class="bento mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
     {home.map((project, i) => <BentoCard project={project} size={slotSizes[i]} />)}
-    <SeeAllCard total={total} />
+    <SeeAllCard total={total} span={seeAllSpan} />
   </div>
 </section>

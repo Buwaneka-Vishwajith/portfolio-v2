@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ai-browser-popup",
+    "fullName": "Buwaneka-Vishwajith/Ai-browser-popup",
+    "name": "Ai-browser-popup",
+    "description": "A produc tion ready Chrome Extension with a glassmor phism command palette that injec ts an AI layer into any webpage via a global keyboard shor tcut, enabling instant text analysis without breaking the user's workflow",
+    "url": "https://github.com/Buwaneka-Vishwajith/Ai-browser-popup",
+    "homepage": "",
+    "language": "TypeScript",
+    "topics": [],
+    "stars": 0,
+    "pushed": "2026-06-25T03:32:30Z",
+    "created": "2026-06-25T03:23:14Z",
+    "tagged": true
+  },
+  {
+    "id": "ddos-map",
+    "fullName": "Buwaneka-Vishwajith/ddos-map",
+    "name": "ddos-map",
+    "description": "A real time DDoS & cyber attack visualiser using Globe GL and integrating live data",
+    "url": "https://github.com/Buwaneka-Vishwajith/ddos-map",
+    "homepage": "",
+    "language": "JavaScript",
+    "topics": [],
+    "stars": 0,
+    "pushed": "2025-09-19T05:50:47Z",
+    "created": "2025-08-12T14:24:57Z",
+    "tagged": true
+  },
+  {
+    "id": "memory-game",
+    "fullName": "Buwaneka-Vishwajith/memory-game",
+    "name": "memory-game",
+    "description": "A dynamic memory game with progressive grid difficulty (3x3, 4x4, 5x5).",
+    "url": "https://github.com/Buwaneka-Vishwajith/memory-game",
+    "homepage": "",
+    "language": "JavaScript",
+    "topics": [],
+    "stars": 0,
+    "pushed": "2025-03-27T08:39:56Z",
+    "created": "2024-12-26T10:46:01Z",
+    "tagged": true
+  }
+]
