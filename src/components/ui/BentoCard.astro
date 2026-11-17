@@ -2,6 +2,7 @@
 import type { Project } from '../../lib/projects';
 import SpotlightCard from '../react/SpotlightCard/SpotlightCard.jsx';
 import NudgeDemo from './NudgeDemo.astro';
+import ThreatScopeDemo from './ThreatScopeDemo.astro';
 
 type Size = 'large' | 'wide' | 'tall' | 'small';
 
@@ -63,6 +64,8 @@ const meta = data.year;
     <div class="relative mt-6 aspect-video w-full overflow-hidden rounded-xl bg-ink/5 ring-1 ring-ink/10">
       {data.demo === 'nudge' ? (
         <NudgeDemo />
+      ) : data.demo === 'threatscope' ? (
+        <ThreatScopeDemo />
       ) : data.video ? (
         <video class="h-full w-full object-cover" src={data.video} poster={data.poster} muted loop playsinline autoplay preload="none" />
       ) : (

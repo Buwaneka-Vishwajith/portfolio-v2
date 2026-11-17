@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import ink from '../../assets/inc.png';
+import arrow from '../../assets/arrow.png';
+import ink from '../../assets/ink.png';
 import BlurText from '../react/BlurText/BlurText.jsx';
 import ProximityText from '../react/ProximityText.jsx';
 import ArticleCarousel from '../react/ArticleCarousel.jsx';
@@ -33,7 +34,7 @@ const articles = getSelectedArticles().map((a) => ({
       distance={16}
     />
       <h2 id="writing-title" aria-label="Occasionally, I write" class="headline text-[length:var(--text-display)]" data-split>
-        <ProximityText client:visible text="Occasionally," /> <span class="headline-serif"><ProximityText client:visible text="I writ" variant="serif" /><span class="relative inline-block"><ProximityText client:visible text="e" variant="serif" /><Image src={ink} alt="" aria-hidden="true" format="webp" widths={[64, 128]} sizes="(min-width: 1720px) 62px, 3.6vw" quality={85} class="sticker-pop absolute -top-[-0.2em] -right-[0.16em] h-[1.2em] w-[1.2em] max-w-none select-none" /></span></span>
+        <ProximityText client:visible text="Occasionally," /> <span class="headline-serif"><ProximityText client:visible text="I" variant="serif" /> <span class="relative inline-block"><ProximityText client:visible text="w" variant="serif" /><Image src={ink} alt="" aria-hidden="true" format="webp" widths={[64, 128]} sizes="(min-width: 1720px) 62px, 3.6vw" quality={85} class="sticker-pop absolute bottom-[88%] left-1/2 h-[0.9em] w-auto max-w-none -translate-x-1/2 select-none" /></span><ProximityText client:visible text="ri" variant="serif" /><span class="relative inline-block"><ProximityText client:visible text="t" variant="serif" /><Image src={arrow} alt="" aria-hidden="true" format="webp" widths={[64, 128]} sizes="(min-width: 1720px) 62px, 3.6vw" quality={85} class="sticker-pop absolute top-[118%] left-1/12 h-[0.45em] w-auto max-w-none -translate-x-1/2 rotate-[140deg] select-none" /></span><ProximityText client:visible text="e" variant="serif" /></span>
       </h2>
     </header>
 

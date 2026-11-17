@@ -1,0 +1,347 @@
+---
+/**
+ * ThreatScopeDemo: a looping, canvas-drawn recreation of Threat Scope
+ * (github.com/Buwaneka-Vishwajith/ddos-map) for its big bento card.
+ *
+ * Mirrors the real app: dark starfield, slowly spinning night globe with a soft #7F8CAA atmosphere,
+ * colour-coded attack arcs between real country positions, a LIVE ATTACK LOG, and threat counters.
+ * No 3D library, images or video: a 2D canvas + a few HTML overlays.
+ * - Runs only while on screen; prefers-reduced-motion gets one still frame.
+ * - Sized in `em` off the card width, so it scales like a video.
+ */
+---
+
+<div class="ts-demo" aria-hidden="true" data-ts-demo>
+  <div class="stage">
+    <canvas class="sky" data-ts-canvas></canvas>
+
+    <div class="title">
+      <p class="name">C Y B E R &nbsp; T H R E A T &nbsp; M A P</p>
+      <p class="sub">Real time DDoS &amp; Cyber Attack Visualization</p>
+    </div>
+
+    <div class="log">
+      <p class="log-head">LIVE ATTACK LOG</p>
+      <div class="rows" data-ts-rows></div>
+    </div>
+
+    <div class="monitor">
+      <p class="mon-head"><span class="live"></span>THREAT MONITOR</p>
+      <div class="cards">
+        <div class="card total"><span class="k">Total</span><span class="v" data-ts-total>0</span></div>
+        <div class="card active"><span class="k">Active</span><span class="v" data-ts-active>0</span></div>
+      </div>
+    </div>
+
+    <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+  </div>
+</div>
+
+<style>
+  .ts-demo {
+    --ease: cubic-bezier(0.32, 0.72, 0, 1);
+    position: absolute;
+    inset: 0;
+    container-type: inline-size;
+    overflow: hidden;
+    border-radius: inherit;
+    user-select: none;
+    pointer-events: none;
+  }
+  .stage {
+    position: absolute;
+    inset: 0;
+    font-size: calc(100cqw / 40); /* 16px when the media box is 640px wide */
+    background: #0b0d0e;
+    color: #cbd5e1;
+    font-family: 'JetBrains Mono Variable', ui-monospace, monospace;
+  }
+  .sky { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  .title { position: absolute; left: 0; width: 62%; top: 1.1em; text-align: center; }
+  .name {
+    font-size: 0.62em;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    background: linear-gradient(90deg, #a5f3fc, #64748b, #a5f3fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .sub { margin-top: 0.3em; font-size: 0.42em; color: rgba(203, 213, 225, 0.45); }
+
+  .log {
+    position: absolute;
+    right: 1.2em;
+    top: 1.1em;
+    bottom: 1.1em;
+    width: 35%;
+    padding: 0.7em 0.65em;
+    border-radius: 0.6em;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    background: rgba(15, 23, 42, 0.35);
+    box-shadow: 0 0 1.2em rgba(168, 85, 247, 0.12), inset 0 0 1.2em rgba(168, 85, 247, 0.05);
+    overflow: hidden;
+  }
+  .log-head {
+    font-size: 0.5em;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: linear-gradient(90deg, rgba(147, 197, 253, 0.75), rgba(147, 197, 253, 0.2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .rows { margin-top: 0.6em; display: grid; gap: 0.32em; }
+  .rows :global(.row) {
+    display: flex;
+    align-items: center;
+    gap: 0.45em;
+    padding: 0.38em 0.45em;
+    border-radius: 0.4em;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(51, 65, 85, 0.5);
+    font-size: 0.4em;
+    white-space: nowrap;
+    animation: ts-in 0.6s var(--ease) both;
+  }
+  .rows :global(.time) { color: #94a3b8; }
+  .rows :global(.chip) {
+    padding: 0.15em 0.45em;
+    border-radius: 0.35em;
+    color: #000;
+    font-weight: 700;
+  }
+  .rows :global(.route) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; color: #cbd5e1; }
+  .rows :global(.time), .rows :global(.chip), .rows :global(.lvl) { flex-shrink: 0; }
+  .rows :global(.src) { color: #22d3ee; }
+  .rows :global(.arrow) { color: #64748b; margin: 0 0.3em; }
+  .rows :global(.tgt) { color: #f472b6; }
+  .rows :global(.lvl) { color: #f87171; font-weight: 700; }
+
+  .monitor { position: absolute; left: 1.2em; bottom: 1.1em; font-size: 0.82em; }
+  .mon-head { display: flex; align-items: center; gap: 0.45em; font-size: 0.42em; font-weight: 700; letter-spacing: 0.08em; color: rgba(147, 197, 253, 0.7); }
+  .live { width: 0.7em; height: 0.7em; border-radius: 50%; background: #4ade80; animation: ts-pulse 2s ease-in-out infinite; }
+  .cards { margin-top: 0.45em; display: flex; gap: 0.4em; }
+  .card { display: grid; gap: 0.1em; padding: 0.35em 0.6em; border-radius: 0.45em; background: #111827; min-width: 3.4em; }
+  .card.total { border: 1px solid rgba(239, 68, 68, 0.5); }
+  .card.active { border: 1px solid rgba(34, 197, 94, 0.5); }
+  .k { font-size: 0.36em; color: #9ca3af; font-family: 'Inter Variable', system-ui, sans-serif; }
+  .v { font-size: 0.75em; font-variant-numeric: tabular-nums; }
+  .total .v { color: #f87171; }
+  .active .v { color: #22d3ee; }
+
+  .corner { position: absolute; width: 1em; height: 1em; border-color: rgba(219, 234, 254, 0.35); animation: ts-pulse 2.4s ease-in-out infinite; }
+  .tl { left: 0.5em; top: 0.5em; border-top: 2px solid; border-left: 2px solid; }
+  .tr { right: 0.5em; top: 0.5em; border-top: 2px solid; border-right: 2px solid; }
+  .bl { left: 0.5em; bottom: 0.5em; border-bottom: 2px solid; border-left: 2px solid; }
+  .br { right: 0.5em; bottom: 0.5em; border-bottom: 2px solid; border-right: 2px solid; }
+
+  @keyframes ts-in {
+    from { opacity: 0; transform: translateY(-0.6em); filter: blur(4px); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+  }
+  @keyframes ts-pulse { 50% { opacity: 0.45; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ts-demo *, .ts-demo :global(*) { animation: none !important; }
+  }
+</style>
+
+<script>
+  import { LAND_DOTS } from '../../data/landDots';
+
+  // Same data as the real app (Back/src/config/countries.js + ATTACK_TYPES).
+  const COUNTRIES: Record<string, [number, number]> = {
+    'United States': [39.83, -98.58], China: [35.86, 104.2], Russia: [61.52, 105.32], Germany: [51.17, 10.45],
+    'United Kingdom': [55.38, -3.44], France: [46.6, 1.89], Japan: [36.2, 138.25], 'South Korea': [35.91, 127.77],
+    India: [20.59, 78.96], Brazil: [-14.24, -51.93], Canada: [56.13, -106.35], Australia: [-25.27, 133.78],
+    Netherlands: [52.13, 5.29], Israel: [31.05, 34.85], Iran: [32.43, 53.69], Turkey: [38.96, 35.24],
+    Ukraine: [48.38, 31.17], 'North Korea': [40.34, 127.51], Pakistan: [30.38, 69.35], Vietnam: [14.06, 108.28],
+  };
+  const TYPES: [string, string][] = [
+    ['DDoS', '#ff3333'], ['Brute Force', '#ffff00'], ['Port Scan', '#00ccff'], ['SQL Injection', '#cc00ff'], ['Malware', '#ff8800'],
+  ];
+  const HIGH = ['China', 'Russia', 'North Korea', 'Iran'];
+  const TARGETS = ['United States', 'Germany', 'United Kingdom', 'Japan', 'South Korea'];
+  const NAMES = Object.keys(COUNTRIES);
+  const RAD = Math.PI / 180;
+
+  type V3 = [number, number, number];
+  const toVec = (lat: number, lng: number): V3 => [Math.cos(lat * RAD) * Math.sin(lng * RAD), Math.sin(lat * RAD), Math.cos(lat * RAD) * Math.cos(lng * RAD)];
+
+  const land: V3[] = [];
+  for (let i = 0; i + 6 <= LAND_DOTS.length; i += 6) {
+    land.push(toVec(parseInt(LAND_DOTS.slice(i, i + 3), 36) / 10 - 90, parseInt(LAND_DOTS.slice(i + 3, i + 6), 36) / 10 - 180));
+  }
+
+  const pick = <T,>(list: T[]) => list[Math.floor(Math.random() * list.length)];
+
+  function setup(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = '1';
+    const canvas = root.querySelector<HTMLCanvasElement>('[data-ts-canvas]')!;
+    const ctx = canvas.getContext('2d')!;
+    const rows = root.querySelector<HTMLElement>('[data-ts-rows]')!;
+    const totalEl = root.querySelector<HTMLElement>('[data-ts-total]')!;
+    const activeEl = root.querySelector<HTMLElement>('[data-ts-active]')!;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let W = 1, H = 1, dpr = 1;
+    let stars: [number, number, number, number][] = [];
+    const resize = () => {
+      const r = root.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = Math.max(1, r.width);
+      H = Math.max(1, r.height);
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      stars = Array.from({ length: 90 }, () => [Math.random() * W, Math.random() * H, Math.random() * 1.2 + 0.4, Math.random() * 6]);
+      if (!running) draw(performance.now());
+    };
+
+    type Arc = { a: V3; b: V3; color: string; born: number; dur: number; alt: number };
+    let arcs: Arc[] = [];
+    let total = 1180 + Math.floor(Math.random() * 200);
+    let spin = 55; // globe centre longitude: starts over the Middle East / India, then turns east
+    const TILT = 18 * RAD; // look slightly down at the northern hemisphere, where the arcs are
+
+    const project = (v: V3, R: number, cx: number, cy: number, lift = 1) => {
+      // rotate by -spin around Y, then tilt around X
+      const s = -spin * RAD;
+      const x1 = v[0] * Math.cos(s) + v[2] * Math.sin(s);
+      const z1 = -v[0] * Math.sin(s) + v[2] * Math.cos(s);
+      const y2 = v[1] * Math.cos(TILT) - z1 * Math.sin(TILT);
+      const z2 = v[1] * Math.sin(TILT) + z1 * Math.cos(TILT);
+      return { x: cx + x1 * R * lift, y: cy - y2 * R * lift, z: z2 };
+    };
+
+    const slerp = (a: V3, b: V3, t: number): V3 => {
+      const d = Math.acos(Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]));
+      if (d < 1e-4) return a;
+      const s = Math.sin(d);
+      const k1 = Math.sin((1 - t) * d) / s, k2 = Math.sin(t * d) / s;
+      return [a[0] * k1 + b[0] * k2, a[1] * k1 + b[1] * k2, a[2] * k1 + b[2] * k2];
+    };
+
+    const spawn = (now: number, log = true) => {
+      const src = Math.random() < 0.6 ? pick(HIGH) : pick(NAMES);
+      let tgt = Math.random() < 0.7 ? pick(TARGETS) : pick(NAMES);
+      if (tgt === src) tgt = src === 'United States' ? 'Germany' : 'United States';
+      const [type, color] = pick(TYPES);
+      arcs.push({ a: toVec(...COUNTRIES[src]), b: toVec(...COUNTRIES[tgt]), color, born: now, dur: 1600 + Math.random() * 900, alt: 0.12 + Math.random() * 0.22 });
+      if (arcs.length > 14) arcs.shift();
+      total += 1;
+      totalEl.textContent = total.toLocaleString('en-US');
+      if (!log) return;
+      const row = document.createElement('div');
+      row.className = 'row';
+      const time = new Date().toLocaleTimeString('en-GB');
+      row.innerHTML = `<span class="time">${time}</span><span class="chip" style="background:${color};box-shadow:0 0 0.8em ${color}55">${type}</span><span class="route"><span class="src">${src}</span><span class="arrow">→</span><span class="tgt">${tgt}</span></span><span class="lvl">#${1 + Math.floor(Math.random() * 10)}</span>`;
+      rows.prepend(row);
+      while (rows.children.length > 9) rows.lastElementChild?.remove();
+    };
+
+    const draw = (now: number) => {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      // stars
+      for (const [x, y, r, p] of stars) {
+        ctx.globalAlpha = reduce ? 0.5 : 0.25 + 0.35 * (0.5 + 0.5 * Math.sin(now / 900 + p));
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(x, y, r, r);
+      }
+      ctx.globalAlpha = 1;
+
+      const cx = W * 0.31, cy = H * 0.53, R = Math.min(W * 0.19, H * 0.32);
+      // atmosphere glow
+      const glow = ctx.createRadialGradient(cx, cy, R * 0.92, cx, cy, R * 1.32);
+      glow.addColorStop(0, 'rgba(127,140,170,0.42)');
+      glow.addColorStop(1, 'rgba(127,140,170,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath(); ctx.arc(cx, cy, R * 1.32, 0, Math.PI * 2); ctx.fill();
+      // night sphere
+      const body = ctx.createRadialGradient(cx - R * 0.35, cy - R * 0.4, R * 0.1, cx, cy, R);
+      body.addColorStop(0, '#1b2433');
+      body.addColorStop(1, '#070a10');
+      ctx.fillStyle = body;
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+      // land dots (front side only, dimmer toward the edge)
+      const dot = Math.max(0.9, R / 105);
+      for (const v of land) {
+        const p = project(v, R, cx, cy);
+        if (p.z <= 0) continue;
+        ctx.fillStyle = `rgba(165,180,210,${0.18 + 0.62 * p.z})`;
+        ctx.fillRect(p.x - dot / 2, p.y - dot / 2, dot, dot);
+      }
+
+      // attack arcs: a bright head travels source → target, the tail follows, then fades
+      ctx.lineCap = 'round';
+      for (const arc of arcs) {
+        const k = (now - arc.born) / arc.dur;
+        if (k > 1.6) continue;
+        const head = Math.min(1, k), tail = Math.max(0, Math.min(1, (k - 0.45) / 0.9));
+        const steps = 40;
+        ctx.beginPath();
+        let started = false;
+        for (let i = 0; i <= steps; i++) {
+          const t = tail + (head - tail) * (i / steps);
+          const lift = 1 + arc.alt * Math.sin(Math.PI * t);
+          const p = project(slerp(arc.a, arc.b, t), R, cx, cy, lift);
+          const behind = p.z < -0.04; // hidden while on the far side of the globe
+          if (behind) { started = false; continue; }
+          if (!started) { ctx.moveTo(p.x, p.y); started = true; } else ctx.lineTo(p.x, p.y);
+        }
+        const fade = k > 1 ? Math.max(0, 1 - (k - 1) / 0.6) : 1;
+        ctx.strokeStyle = arc.color;
+        ctx.globalAlpha = 0.28 * fade; ctx.lineWidth = Math.max(3, R / 30); ctx.stroke();
+        ctx.globalAlpha = 0.95 * fade; ctx.lineWidth = Math.max(1.2, R / 85); ctx.stroke();
+        // impact ring at the target
+        if (k > 1) {
+          const p = project(arc.b, R, cx, cy);
+          if (p.z > 0) {
+            ctx.globalAlpha = fade * 0.9;
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.arc(p.x, p.y, (R / 28) * (1 + (k - 1) * 3), 0, Math.PI * 2); ctx.stroke();
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+      activeEl.textContent = String(arcs.filter((a) => (now - a.born) / a.dur < 1.6).length);
+    };
+
+    let running = false, raf = 0, last = 0, nextSpawn = 0;
+    const loop = (now: number) => {
+      if (!running) return;
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+      last = now;
+      spin += dt * 7; // degrees per second, like globe.gl's slow autoRotate
+      if (now >= nextSpawn) { spawn(now); nextSpawn = now + 550 + Math.random() * 650; }
+      draw(now);
+      raf = requestAnimationFrame(loop);
+    };
+
+    const stillFrame = () => {
+      const now = performance.now();
+      spin = 70;
+      for (let i = 0; i < 7; i++) {
+        spawn(now - 900 - i * 120);
+      }
+      draw(now);
+    };
+
+    new ResizeObserver(resize).observe(root);
+    resize();
+    if (reduce) { stillFrame(); return; }
+    // seed a few rows/arcs so it never starts empty
+    for (let i = 0; i < 4; i++) spawn(performance.now() - i * 400);
+
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !running) { running = true; last = 0; raf = requestAnimationFrame(loop); }
+      else if (!entry.isIntersecting && running) { running = false; cancelAnimationFrame(raf); }
+    }, { threshold: 0.1 }).observe(root);
+  }
+
+  const init = () => document.querySelectorAll<HTMLElement>('[data-ts-demo]').forEach(setup);
+  document.addEventListener('astro:page-load', init);
+</script>
